@@ -16,18 +16,18 @@ public class Main {
         grafo.agregarAeropuerto(jfk);
         grafo.agregarAeropuerto(heathrow);
 
-        // 3️⃣ Agregar vuelos
+        // Agregar vuelos
         grafo.agregarVuelo(daxing, jfk, 10800, "Air China"); // Distancia ficticia en km
         grafo.agregarVuelo(daxing, heathrow, 9200, "British Airways");
         grafo.agregarVuelo(jfk, heathrow, 5560, "Delta");
 
-        // 4️⃣ Mostrar todos los aeropuertos
+        // Mostrar todos los aeropuertos
         System.out.println("\n Lista de Aeropuertos:");
         for (Aeropuerto a : grafo.getAeropuertos()) {
             System.out.println(a);
         }
 
-        // 5️⃣ Mostrar vuelos desde cada aeropuerto
+        // Mostrar vuelos desde cada aeropuerto
         System.out.println("\n Lista de Vuelos:");
         for (Aeropuerto a : grafo.getAeropuertos()) {
             for (Vuelo v : grafo.getVuelosDesde(a)) {
@@ -35,13 +35,13 @@ public class Main {
             }
         }
 
-        // 6️⃣ Probar ruta más corta usando Dijkstra
+        // Probar ruta más corta usando Dijkstra
         Rutas rutas = new Rutas(grafo);
         System.out.println("\n? Ruta más corta de PKX a LHR:");
         Rutas.RutaResultado resultado = rutas.dijkstra(daxing, heathrow);
         System.out.println(resultado);
 
-        // 7️⃣ Eliminar un vuelo
+        // Eliminar un vuelo
         System.out.println("\n Eliminando vuelo PKX → LHR...");
         grafo.eliminarVuelo(daxing, heathrow);
 
@@ -53,7 +53,7 @@ public class Main {
             }
         }
 
-        // 8️⃣ Eliminar un aeropuerto
+        // Eliminar un aeropuerto
         System.out.println("\n Eliminando aeropuerto JFK...");
         grafo.eliminarAeropuerto(jfk);
 
@@ -63,8 +63,9 @@ public class Main {
             System.out.println(a);
         }
 
-        // 9️⃣ Guardar cambios en archivo
+        // Guardar cambios en archivo
         DatosVuelos.guardarDatos(grafo);
         System.out.println("\n Datos guardados correctamente.");
     }
 }
+
