@@ -1,14 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.MenuButton?>
+<?import javafx.scene.control.MenuItem?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" prefHeight="200" prefWidth="320" xmlns:fx="http://javafx.com/fxml/1" fx:controller="aeropuertovuelos.FXMLDocumentController">
-    <children>
-        <Button layoutX="126" layoutY="90" text="Click Me!" onAction="#handleButtonAction" fx:id="button" />
-        <Label layoutX="126" layoutY="120" minHeight="16" minWidth="69" fx:id="label" />
-    </children>
-</AnchorPane>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="528.0" prefWidth="759.0" xmlns="http://javafx.com/javafx/24.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <top>
+      <Label alignment="CENTER" prefHeight="66.0" prefWidth="509.0" text="Aeropuerto Internacional de Daxing" textAlignment="CENTER" BorderPane.alignment="CENTER">
+         <font>
+            <Font name="System Bold" size="22.0" />
+         </font>
+      </Label>
+   </top>
+   <left>
+      <VBox prefHeight="332.0" prefWidth="122.0" BorderPane.alignment="CENTER">
+         <children>
+            <MenuButton mnemonicParsing="false" text="Aeropuerto">
+              <items>
+                <MenuItem mnemonicParsing="false" text="Añadir" />
+                <MenuItem mnemonicParsing="false" text="Eliminar" />
+              </items>
+            </MenuButton>
+            <MenuButton mnemonicParsing="false" text="Vuelo">
+              <items>
+                <MenuItem mnemonicParsing="false" text="Añadir" />
+                  <MenuItem mnemonicParsing="false" text="Editar" />
+                <MenuItem mnemonicParsing="false" text="Eliminar" />
+              </items>
+            </MenuButton>
+            <Button mnemonicParsing="false" text="Buscar ruta" />
+         </children>
+      </VBox>
+   </left>
+   <center>
+      <AnchorPane prefHeight="421.0" prefWidth="560.0" BorderPane.alignment="CENTER" />
+   </center>
+</BorderPane>
