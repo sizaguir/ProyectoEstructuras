@@ -20,12 +20,6 @@
    <left>
       <VBox prefHeight="332.0" prefWidth="122.0" BorderPane.alignment="CENTER">
          <children>
-            <MenuButton fx:id="aeropuertoMenu" mnemonicParsing="false" text="Aeropuerto">
-              <items>
-                <MenuItem fx:id="añadirAero" mnemonicParsing="false" onAction="#abrirAgregarAeropuertoHandler" text="Añadir" />
-                <MenuItem fx:id="eliminarAero" mnemonicParsing="false" onAction="#abrirEliminarAeroHandler" text="Eliminar" />
-              </items>
-            </MenuButton>
             <MenuButton fx:id="vueloMenu" mnemonicParsing="false" text="Vuelo">
               <items>
                 <MenuItem fx:id="añadirVuelo" mnemonicParsing="false" onAction="#añadirVueloHandler" text="Añadir" />
@@ -38,6 +32,6 @@
       </VBox>
    </left>
    <center>
-      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <AnchorPane fx:id="grafoPane" onMouseClicked="#handleAnchorPaneClick" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
    </center>
 </BorderPane>

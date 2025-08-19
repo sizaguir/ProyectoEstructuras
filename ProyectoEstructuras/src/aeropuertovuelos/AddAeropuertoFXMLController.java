@@ -41,6 +41,9 @@ public class AddAeropuertoFXMLController implements Initializable {
     @FXML
     private Button clearAllButton;
     private GrafoVuelos grafo;
+    private FXMLDocumentController mainController;
+    private double posX;
+    private double posY;
     
 
     /**
@@ -83,6 +86,8 @@ public class AddAeropuertoFXMLController implements Initializable {
         }
         
         Aeropuerto aeropuerto = new Aeropuerto(codigo, nombre, ciudad, pais, lat, lon);
+        aeropuerto.setX(posX);
+        aeropuerto.setY(posY);
         
         if (grafo.contieneAeropuerto(aeropuerto)) {
             Alert alert = new Alert(Alert.AlertType.WARNING);
@@ -94,14 +99,16 @@ public class AddAeropuertoFXMLController implements Initializable {
         }
         
         grafo.agregarAeropuerto(aeropuerto);
+        DatosVuelos.guardarDatos(grafo);
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Éxito");
         alert.setHeaderText(null);
         alert.setContentText("Aeropuerto agregado correctamente.");
         alert.showAndWait();
-
-        clearAll(null);
+        
+        Stage stage = (Stage) addAeropuertoButton.getScene().getWindow();
+        stage.close();
     }
 
     @FXML
@@ -118,6 +125,19 @@ public class AddAeropuertoFXMLController implements Initializable {
         paísText.clear();
         latText.clear();
         longText.clear();
+    }
+    
+    public void setGrafo(GrafoVuelos grafo) {
+        this.grafo = grafo;
+    }
+
+    public void setMainController(FXMLDocumentController mainController) {
+        this.mainController = mainController;
+    }
+    
+    public void setPosicion(double x, double y) {
+        this.posX = x;
+        this.posY= y;
     }
     
 }

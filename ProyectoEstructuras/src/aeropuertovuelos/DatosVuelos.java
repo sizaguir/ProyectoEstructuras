@@ -18,12 +18,14 @@ public class DatosVuelos {
      * Guarda la información del grafo en archivos de texto.
      */
     public static void guardarDatos(GrafoVuelos grafo) {
-        try (PrintWriter pwA = new PrintWriter(new FileWriter(ARCHIVO_AEROPUERTOS));
+         try (PrintWriter pwA = new PrintWriter(new FileWriter(ARCHIVO_AEROPUERTOS));
              PrintWriter pwV = new PrintWriter(new FileWriter(ARCHIVO_VUELOS))) {
 
             // Guardar aeropuertos
             for (Aeropuerto a : grafo.getAeropuertos()) {
-                pwA.println(a.getCodigo() + ";" + a.getNombre() + ";" + a.getCiudad() + ";" + a.getPais() + ";" + a.getLatitud() + ";" + a.getLongitud());
+                pwA.println(a.getCodigo() + ";" + a.getNombre() + ";" + a.getCiudad() + ";" + a.getPais() 
+                             + ";" + a.getLatitud() + ";" + a.getLongitud() 
+                             + ";" + a.getX() + ";" + a.getY());
             }
 
             // Guardar vuelos
@@ -57,6 +59,11 @@ public class DatosVuelos {
                         Double.parseDouble(partes[4]), // latitud
                         Double.parseDouble(partes[5])  // longitud
                 );
+                // Cargar posiciones x e y si existen
+                if (partes.length > 7) {
+                    a.setX(Double.parseDouble(partes[6]));
+                    a.setY(Double.parseDouble(partes[7]));
+                }
                 grafo.agregarAeropuerto(a);
                 mapaAeropuertos.put(a.getCodigo(), a);
             }
