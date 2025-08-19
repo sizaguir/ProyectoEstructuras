@@ -55,5 +55,42 @@ public class GrafoVuelos {
     public boolean contieneAeropuerto(Aeropuerto aeropuerto) {
         return adyacencia.containsKey(aeropuerto);
     }
+    
+    public List<Vuelo> getTodosLosVuelos() {
+    List<Vuelo> todos = new ArrayList<>();
+    for (Aeropuerto origen : adyacencia.keySet()) {
+        todos.addAll(adyacencia.get(origen));
+    }
+    return todos;
+}
+
+        // Verificar si existe un vuelo entre dos aeropuertos
+    public boolean existeVuelo(Aeropuerto origen, Aeropuerto destino) {
+        List<Vuelo> vuelos = adyacencia.get(origen);
+        if (vuelos != null) {
+            for (Vuelo v : vuelos) {
+                if (v.getDestino().equals(destino)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    // Editar un vuelo (modifica peso y aerolínea)
+    public boolean editarVuelo(Aeropuerto origen, Aeropuerto destino, double nuevoPeso, String nuevaAerolinea) {
+        List<Vuelo> vuelos = adyacencia.get(origen);
+        if (vuelos != null) {
+            for (Vuelo v : vuelos) {
+                if (v.getDestino().equals(destino)) {
+                    v.setPeso(nuevoPeso);
+                    v.setAerolinea(nuevaAerolinea);
+                    return true; // Editado con éxito
+                }
+            }
+        }
+        return false; // No se encontró el vuelo
+    }
+
 }
 

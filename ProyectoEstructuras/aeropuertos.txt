@@ -1,0 +1,2 @@
+LHR;Aeropuerto de Heathrow;Londres;Reino Unido;51.47;-0.4543
+PKX;Aeropuerto Internacional de Daxing;Pekín;China;39.5098;116.4106

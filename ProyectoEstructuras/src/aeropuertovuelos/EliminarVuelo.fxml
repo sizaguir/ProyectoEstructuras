@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="aeropuertovuelos.EliminarVueloFXMLController">
+    <center>
+        <VBox spacing="10" alignment="CENTER" style="-fx-padding: 20;">
+            <TableView fx:id="tablaVuelos" prefHeight="300" prefWidth="500">
+                <columns>
+                    <TableColumn fx:id="colOrigen" text="Origen" prefWidth="100"/>
+                    <TableColumn fx:id="colDestino" text="Destino" prefWidth="100"/>
+                    <TableColumn fx:id="colPeso" text="Peso" prefWidth="100"/>
+                    <TableColumn fx:id="colAerolinea" text="Aerolínea" prefWidth="150"/>
+                </columns>
+            </TableView>
+            <HBox spacing="10" alignment="CENTER">
+                <Button text="Eliminar Vuelo" onAction="#eliminarVuelo"/>
+                <Button text="Volver" onAction="#volver"/>
+            </HBox>
+        </VBox>
+    </center>
+</BorderPane>

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" 
+            fx:controller="aeropuertovuelos.AddVueloController"
+            prefWidth="400" prefHeight="300">
+
+    <children>
+        <VBox spacing="10" alignment="CENTER" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20" AnchorPane.rightAnchor="20">
+            <children>
+                <Label text="Agregar Vuelo" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+                <HBox spacing="10">
+                    <Label text="Origen:"/>
+                    <ComboBox fx:id="cbOrigen" prefWidth="200"/>
+                </HBox>
+
+                <HBox spacing="10">
+                    <Label text="Destino:"/>
+                    <ComboBox fx:id="cbDestino" prefWidth="200"/>
+                </HBox>
+
+                <HBox spacing="10">
+                    <Label text="Distancia/Tiempo/Costo:"/>
+                    <TextField fx:id="txtPeso" promptText="Ej: 1200"/>
+                </HBox>
+
+                <HBox spacing="10">
+                    <Label text="Aerolínea:"/>
+                    <TextField fx:id="txtAerolinea" promptText="Ej: Air China"/>
+                </HBox>
+
+                <Button text="Agregar Vuelo" onAction="#agregarVuelo" style="-fx-background-color: #4CAF50; -fx-text-fill: white;"/>
+                <Label fx:id="lblMensaje" textFill="red"/>
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>
