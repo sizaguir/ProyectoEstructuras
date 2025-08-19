@@ -1,34 +1,41 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXML2.java to edit this template
- */
 package aeropuertovuelos;
 
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.AnchorPane;
+import java.io.IOException;
 
-/**
- *
- * @author arife
- */
-public class FXMLDocumentController implements Initializable {
-    
+public class FXMLDocumentController {
+
     @FXML
-    private Label label;
-    
+    private BorderPane borderPane;
+
     @FXML
-    private void handleButtonAction(ActionEvent event) {
-        System.out.println("You clicked me!");
-        label.setText("Hello World!");
+    private AnchorPane panelCentral;
+
+    @FXML
+    public void onAddVuelo() {
+        cargarEnCentro("AddVuelo.fxml");
     }
-    
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
-    
+
+    @FXML
+    public void onEditVuelo() {
+        cargarEnCentro("EditarVuelo.fxml");
+    }
+
+    @FXML
+    public void onDeleteVuelo() {
+        cargarEnCentro("EliminarVuelo.fxml");
+    }
+
+    private void cargarEnCentro(String fxmlFile) {
+        try {
+            AnchorPane vista = FXMLLoader.load(getClass().getResource(fxmlFile));
+            borderPane.setCenter(vista);
+            System.out.println("Se cargó: " + fxmlFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
