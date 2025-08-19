@@ -1,41 +1,62 @@
 package aeropuertovuelos;
 
+import java.io.IOException;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.layout.BorderPane;
+import javafx.scene.Node;
 import javafx.scene.layout.AnchorPane;
-import java.io.IOException;
 
 public class FXMLDocumentController {
 
     @FXML
-    private BorderPane borderPane;
+    private AnchorPane panelPrincipal;
 
-    @FXML
-    private AnchorPane panelCentral;
-
-    @FXML
-    public void onAddVuelo() {
-        cargarEnCentro("AddVuelo.fxml");
-    }
-
-    @FXML
-    public void onEditVuelo() {
-        cargarEnCentro("EditarVuelo.fxml");
-    }
-
-    @FXML
-    public void onDeleteVuelo() {
-        cargarEnCentro("EliminarVuelo.fxml");
-    }
-
-    private void cargarEnCentro(String fxmlFile) {
+    // Método genérico para cargar cualquier FXML dentro del panel principal
+    private void cargarVista(String fxml) {
         try {
-            AnchorPane vista = FXMLLoader.load(getClass().getResource(fxmlFile));
-            borderPane.setCenter(vista);
-            System.out.println("Se cargó: " + fxmlFile);
+            AnchorPane nuevaVista = FXMLLoader.load(getClass().getResource(fxml));
+            panelPrincipal.getChildren().setAll(nuevaVista);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    // --------- Aeropuerto ----------
+    @FXML
+    private void abrirAddAeropuerto(ActionEvent event) {
+        cargarVista("AddAeropuerto.fxml");
+    }
+
+    @FXML
+    private void abrirEditAeropuerto(ActionEvent event) {
+        cargarVista("EditarAeropuerto.fxml");
+    }
+
+    @FXML
+    private void abrirDeleteAeropuerto(ActionEvent event) {
+        cargarVista("EliminarAeropuerto.fxml");
+    }
+
+    // --------- Vuelo ----------
+    @FXML
+    private void abrirAddVuelo(ActionEvent event) {
+        cargarVista("AddVuelo.fxml");
+    }
+
+    @FXML
+    private void abrirEditVuelo(ActionEvent event) {
+        cargarVista("EditarVuelo.fxml");
+    }
+
+    @FXML
+    private void abrirDeleteVuelo(ActionEvent event) {
+        cargarVista("EliminarVuelo.fxml");
+    }
+
+    // --------- Buscar rutas ----------
+    @FXML
+    private void abrirBuscarRutas(ActionEvent event) {
+        cargarVista("BuscarRuta.fxml");
     }
 }
