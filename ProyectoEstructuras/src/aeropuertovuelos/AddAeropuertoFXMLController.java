@@ -41,6 +41,7 @@ public class AddAeropuertoFXMLController implements Initializable {
     @FXML
     private Button clearAllButton;
     private GrafoVuelos grafo;
+    
 
     /**
      * Initializes the controller class.
@@ -52,15 +53,46 @@ public class AddAeropuertoFXMLController implements Initializable {
 
     @FXML
     private void agregarAeropuerto(ActionEvent event) {
-        String nombre = nombreText.getText();
-        String codigo = codText.getText();
-        String ciudad = ciudadText.getText();
-        String pais = paísText.getText();
-        double lat = Double.parseDouble(latText.getText());
-        double lon = Double.parseDouble(longText.getText());
-
+        String nombre = nombreText.getText().trim();
+        String codigo = codText.getText().trim();
+        String ciudad = ciudadText.getText().trim();
+        String pais = paísText.getText().trim();
+        String latStr = latText.getText().trim();
+        String lonStr = longText.getText().trim();
+        
+        if(nombre.isEmpty()||codigo.isEmpty()||ciudad.isEmpty()||pais.isEmpty()||latStr.isEmpty()||lonStr.isEmpty()){
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Campos vacíos");
+            alert.setHeaderText(null);
+            alert.setContentText("Por favor complete todos los campos.");
+            alert.showAndWait();
+            return;
+        }
+        
+        double lat, lon;
+        try {
+            lat = Double.parseDouble(latStr);
+            lon = Double.parseDouble(lonStr);
+        } catch (NumberFormatException e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error en formato");
+            alert.setHeaderText(null);
+            alert.setContentText("Latitud y longitud deben ser valores numéricos válidos.");
+            alert.showAndWait();
+            return;
+        }
+        
         Aeropuerto aeropuerto = new Aeropuerto(codigo, nombre, ciudad, pais, lat, lon);
-
+        
+        if (grafo.contieneAeropuerto(aeropuerto)) {
+            Alert alert = new Alert(Alert.AlertType.WARNING);
+            alert.setTitle("Duplicado");
+            alert.setHeaderText(null);
+            alert.setContentText("Ya existe un aeropuerto con ese código.");
+            alert.showAndWait();
+            return;
+        }
+        
         grafo.agregarAeropuerto(aeropuerto);
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
