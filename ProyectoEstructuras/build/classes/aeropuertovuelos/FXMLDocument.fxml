@@ -25,15 +25,15 @@
           <Menu mnemonicParsing="false" text="Vuelo">
             <items>
               <MenuItem fx:id="añadirVuelo" mnemonicParsing="false" onAction="#agregarVuelo" text="Agregar Vuelo" />
-                  <MenuItem mnemonicParsing="false" text="Eliminar Vuelo" />
+                  <MenuItem fx:id="eliminarVuelo" mnemonicParsing="false" onAction="#eliminarVuelo" text="Eliminar Vuelo" />
             </items>
           </Menu>
           <Menu mnemonicParsing="false" text="Aeropuerto">
             <items>
-              <MenuItem mnemonicParsing="false" text="Eliminar Aeropuerto" />
+              <MenuItem fx:id="eliminarAeropuerto" mnemonicParsing="false" onAction="#eliminarAeropuerto" text="Eliminar Aeropuerto" />
             </items>
           </Menu>
-            <Menu mnemonicParsing="false" text="Buscar Ruta" />
+            <Menu fx:id="buscarRuta" mnemonicParsing="false" onAction="#buscarRuta" text="Buscar Ruta" />
         </menus>
       </MenuBar>
    </bottom>

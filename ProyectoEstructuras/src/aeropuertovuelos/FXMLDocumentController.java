@@ -17,6 +17,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.Menu;
 import javafx.scene.control.MenuButton;
 import javafx.scene.control.MenuItem;
 import javafx.scene.input.MouseEvent;
@@ -41,6 +42,12 @@ public class FXMLDocumentController implements Initializable {
     private AnchorPane grafoPane;
     private GrafoVuelos grafo;
     private Map<Aeropuerto, Circle> nodosVisuales = new HashMap<>();
+    @FXML
+    private MenuItem eliminarVuelo;
+    @FXML
+    private MenuItem eliminarAeropuerto;
+    @FXML
+    private Menu buscarRuta;
 
     
     
@@ -183,5 +190,35 @@ public class FXMLDocumentController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @FXML
+    private void eliminarVuelo(ActionEvent event) {
+        try {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("EliminarVuelo.fxml"));
+        Parent root = loader.load();
+
+        EliminarVueloFXMLController controller = loader.getController();
+        controller.setGrafo(grafo);
+
+        Stage stage = new Stage();
+        stage.setTitle("Eliminar Vuelo");
+        stage.setScene(new Scene(root));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.showAndWait();
+        
+        dibujarGrafo();
+        } catch (IOException e) {
+        e.printStackTrace();
+        }
+        
+    }
+
+    @FXML
+    private void eliminarAeropuerto(ActionEvent event) {
+    }
+
+    @FXML
+    private void buscarRuta(ActionEvent event) {
     }
 }
