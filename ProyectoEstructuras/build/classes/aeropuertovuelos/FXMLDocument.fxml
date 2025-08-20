@@ -41,7 +41,11 @@
               <MenuItem fx:id="eliminarAeropuerto" mnemonicParsing="false" onAction="#eliminarAeropuerto" text="Eliminar Aeropuerto" />
             </items>
           </Menu>
-          <Menu fx:id="buscarRuta" mnemonicParsing="false" onAction="#buscarRuta" text="Buscar Ruta" />
+            <Menu text="Ruta">
+                <items>
+                    <MenuItem text="Buscar Ruta" onAction="#buscarRuta"/>
+                </items>
+            </Menu>
         </menus>
       </MenuBar>
    </bottom>

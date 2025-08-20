@@ -13,8 +13,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
@@ -262,6 +264,29 @@ public class FXMLDocumentController implements Initializable {
     }
     
     @FXML
-    private void buscarRuta(ActionEvent event) {
+private void buscarRuta(ActionEvent event) {
+    try {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("BuscarRuta.fxml"));
+        Scene scene = new Scene(loader.load());
+
+        // Pasamos el grafo a la ventana BuscarRuta
+        BuscarRutaFXMLController controller = loader.getController();
+        controller.setGrafo(grafo);
+
+        Stage stage = new Stage();
+        stage.setTitle("Buscar Ruta");
+        stage.setScene(scene);
+        stage.initModality(Modality.WINDOW_MODAL);
+
+        // Usamos el grafoPane (que sí es un Node visible en la escena principal)
+        stage.initOwner(grafoPane.getScene().getWindow());
+        stage.show();
+
+    } catch (IOException e) {
+        e.printStackTrace();
+        new Alert(Alert.AlertType.ERROR, "No se pudo abrir la ventana de Buscar Ruta.").showAndWait();
     }
+}
+
+
 }
