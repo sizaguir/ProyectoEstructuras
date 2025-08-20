@@ -1,9 +1,13 @@
 package aeropuertovuelos;
 
+import java.io.IOException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class MostrarVuelosFXMLController {
@@ -73,4 +77,60 @@ public class MostrarVuelosFXMLController {
         Stage stage = (Stage) tablaVuelos.getScene().getWindow();
         stage.close();
     }
+
+    @FXML
+    private void editarVuelo() {
+        Vuelo vuelo = tablaVuelos.getSelectionModel().getSelectedItem();
+        if (vuelo == null) {
+            new Alert(Alert.AlertType.WARNING, "Selecciona un vuelo primero.").showAndWait();
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("EditarVuelo.fxml"));
+            Scene scene = new Scene(loader.load());
+
+            EditarVueloFXMLController controller = loader.getController();
+            controller.setGrafo(grafo);
+            controller.setVuelo(vuelo);
+
+            Stage stage = new Stage();
+            stage.setTitle("Editar Vuelo");
+            stage.setScene(scene);
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.initOwner(tablaVuelos.getScene().getWindow());
+            stage.showAndWait();
+
+            // refrescar tabla
+            tablaVuelos.setItems(FXCollections.observableArrayList(
+                    grafo.getVuelosDesde(aeropuerto)
+            ));
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "No se pudo abrir la ventana de edición.").showAndWait();
+        }
+    }
+
+    @FXML
+    private void eliminarVuelo() {
+        Vuelo vuelo = tablaVuelos.getSelectionModel().getSelectedItem();
+        if (vuelo == null) {
+            new Alert(Alert.AlertType.WARNING, "Selecciona un vuelo primero.").showAndWait();
+            return;
+        }
+
+        grafo.eliminarVuelo(vuelo.getOrigen(), vuelo.getDestino());
+        tablaVuelos.setItems(FXCollections.observableArrayList(
+                grafo.getVuelosDesde(aeropuerto)
+        ));
+        DatosVuelos.guardarDatos(grafo);
+    }
+
+    @FXML
+    private void volver() {
+        Stage stage = (Stage) tablaVuelos.getScene().getWindow();
+        stage.close();
+    }
 }
+

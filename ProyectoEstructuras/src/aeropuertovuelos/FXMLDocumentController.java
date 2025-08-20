@@ -48,6 +48,8 @@ public class FXMLDocumentController implements Initializable {
     private MenuItem eliminarAeropuerto;
     @FXML
     private Menu buscarRuta;
+    @FXML
+    private MenuItem editarVuelo;
 
     
     
@@ -257,7 +259,7 @@ public class FXMLDocumentController implements Initializable {
     } catch (IOException e) {
         e.printStackTrace();
     }
-}
+    }
     
     @FXML
     private void buscarRuta(ActionEvent event) {

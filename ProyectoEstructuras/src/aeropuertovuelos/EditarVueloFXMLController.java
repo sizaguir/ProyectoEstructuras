@@ -1,68 +1,89 @@
 package aeropuertovuelos;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.stage.Stage;
 
 public class EditarVueloFXMLController {
 
     @FXML
-    private ComboBox<Aeropuerto> comboOrigen;
-
+    private ComboBox<Aeropuerto> cmbOrigen;
     @FXML
-    private ComboBox<Aeropuerto> comboDestino;
-
+    private ComboBox<Aeropuerto> cmbDestino;
     @FXML
-    private TextField txtNuevoPeso;
-
+    private TextField txtPeso;
     @FXML
-    private TextField txtNuevaAerolinea;
-
-    @FXML
-    private Button btnEditarVuelo;
+    private TextField txtAerolinea;
 
     private GrafoVuelos grafo;
+    private Vuelo vueloOriginal;  // el vuelo que se está editando
 
     public void setGrafo(GrafoVuelos grafo) {
         this.grafo = grafo;
-        comboOrigen.getItems().addAll(grafo.getAeropuertos());
-        comboDestino.getItems().addAll(grafo.getAeropuertos());
+        cmbOrigen.getItems().setAll(grafo.getAeropuertos());
+        cmbDestino.getItems().setAll(grafo.getAeropuertos());
     }
+
+    // Recibir el vuelo desde la tabla
+    public void setVuelo(Vuelo vuelo) {
+        this.vueloOriginal = vuelo;
+        cmbOrigen.setValue(vuelo.getOrigen());
+        cmbDestino.setValue(vuelo.getDestino());
+        txtPeso.setText(String.valueOf(vuelo.getPeso()));
+        txtAerolinea.setText(vuelo.getAerolinea());
+    }
+
+    
+    @FXML
+    private void guardarCambios() {
+        try {
+            // Validar si realmente se cargó un vuelo
+            if (vueloOriginal == null) {
+                Alert alert = new Alert(Alert.AlertType.WARNING, 
+                    "Primero selecciona un vuelo para editar.");
+                alert.showAndWait();
+                return; // No hace nada más
+            }
+
+            Aeropuerto origen = cmbOrigen.getValue();
+            Aeropuerto destino = cmbDestino.getValue();
+            String aerolinea = txtAerolinea.getText();
+
+            if (origen == null || destino == null || txtPeso.getText().isEmpty() || aerolinea.isEmpty()) {
+                throw new IllegalArgumentException("Todos los campos son obligatorios");
+            }
+
+            double peso = Double.parseDouble(txtPeso.getText());
+
+            // eliminar vuelo viejo y agregar el nuevo
+            grafo.eliminarVuelo(vueloOriginal.getOrigen(), vueloOriginal.getDestino());
+            grafo.agregarVuelo(origen, destino, peso, aerolinea);
+
+            DatosVuelos.guardarDatos(grafo); // persistir cambios
+
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Vuelo editado");
+            alert.setHeaderText(null);
+            alert.setContentText("El vuelo se editó correctamente.");
+            alert.showAndWait();
+
+            cerrarVentana();
+
+        } catch (Exception e) {
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Error al guardar cambios: " + e.getMessage());
+            alert.showAndWait();
+        }
+    }
+
+
 
     @FXML
-    private void editarVuelo() {
-        Aeropuerto origen = comboOrigen.getValue();
-        Aeropuerto destino = comboDestino.getValue();
-        String aerolinea = txtNuevaAerolinea.getText();
-
-        if (origen == null || destino == null || txtNuevoPeso.getText().isEmpty() || aerolinea.isEmpty()) {
-            mostrarAlerta("Error", "Todos los campos son obligatorios.");
-            return;
-        }
-
-        try {
-            double nuevoPeso = Double.parseDouble(txtNuevoPeso.getText());
-
-            boolean editado = grafo.editarVuelo(origen, destino, nuevoPeso, aerolinea);
-
-            if (editado) {
-                mostrarAlerta("Éxito", "El vuelo fue editado correctamente.");
-            } else {
-                mostrarAlerta("Error", "El vuelo no existe en el grafo.");
-            }
-        } catch (NumberFormatException e) {
-            mostrarAlerta("Error", "El peso debe ser un número válido.");
-        }
+    private void cancelar() {
+        cerrarVentana();
     }
 
-    private void mostrarAlerta(String titulo, String mensaje) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle(titulo);
-        alert.setHeaderText(null);
-        alert.setContentText(mensaje);
-        alert.showAndWait();
+    private void cerrarVentana() {
+        Stage stage = (Stage) txtPeso.getScene().getWindow();
+        stage.close();
     }
 }
