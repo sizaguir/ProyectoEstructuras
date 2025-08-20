@@ -48,29 +48,15 @@ public class FXMLDocumentController implements Initializable {
     private AnchorPane grafoPane;
     private GrafoVuelos grafo;
     private Map<Aeropuerto, Circle> nodosVisuales = new HashMap<>();
+    private Aeropuerto origenSeleccionado;
+    private Aeropuerto destinoSeleccionado;
+    
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        grafo = DatosVuelos.cargarDatos(); //Carga aeropuertos y vuelos desde archivos
+        grafo = DatosVuelos.cargarDatos(); //Carga aeropuertos y vuelos desde los archivos
         dibujarGrafo(); // Función que dibuja nodos y líneas en el AnchorPane
     }    
-
-
-    @FXML
-    private void añadirVueloHandler(ActionEvent event) {
-    }
-
-    @FXML
-    private void editarVueloHandler(ActionEvent event) {
-    }
-
-    @FXML
-    private void eliminarVueloHandler(ActionEvent event) {
-    }
-
-    @FXML
-    private void buscarRuta(ActionEvent event) {
-    }
 
     private void abrirAgregarAeropuertoHandler(double posX, double posY) {
         try {
@@ -91,7 +77,7 @@ public class FXMLDocumentController implements Initializable {
         }
     }
     
-    private void dibujarGrafo() {
+    private void dibujarGrafo(){
         grafoPane.getChildren().clear();
         nodosVisuales.clear();
 
@@ -113,23 +99,60 @@ public class FXMLDocumentController implements Initializable {
             }
 
             Circle nodo = new Circle(cx, cy, 15, Color.BLUE);
-            nodo.setOnMouseClicked(e -> System.out.println("Seleccionado: " + a.getNombre()));
+            nodo.setOnMouseClicked(e -> manejarClickNodo(a, nodo));
 
             grafoPane.getChildren().add(nodo);
             nodosVisuales.put(a, nodo);
         }
 
-        for (Aeropuerto origen : grafo.getAeropuertos()) {
-            for (Vuelo v : grafo.getVuelosDesde(origen)) {
+        for (Aeropuerto origen : grafo.getAeropuertos()){
+            for (Vuelo v : grafo.getVuelosDesde(origen)){
                 Circle cOrigen = nodosVisuales.get(origen);
                 Circle cDestino = nodosVisuales.get(v.getDestino());
-                if (cOrigen != null && cDestino != null) {
+                if (cOrigen != null && cDestino != null){
                     Line linea = new Line(cOrigen.getCenterX(), cOrigen.getCenterY(),
                                           cDestino.getCenterX(), cDestino.getCenterY());
                     linea.setStrokeWidth(2);
+                    linea.setStroke(Color.GRAY);
                     grafoPane.getChildren().add(linea);
                 }
             }
+        }
+    }
+    
+    private void manejarClickNodo(Aeropuerto aeropuerto, Circle nodo){
+        if (origenSeleccionado == null){
+            origenSeleccionado = aeropuerto;
+            nodo.setFill(Color.RED); // Nodo origen
+        } else if (destinoSeleccionado == null && aeropuerto != origenSeleccionado){
+            destinoSeleccionado = aeropuerto;
+            nodo.setFill(Color.ORANGE); // Nodo destino
+
+            abrirAgregarVuelo(origenSeleccionado, destinoSeleccionado);
+
+            origenSeleccionado = null;
+            destinoSeleccionado = null;
+            dibujarGrafo(); // Redibuja todo para resetear colores
+        }
+    }
+    
+    private void abrirAgregarVuelo(Aeropuerto origen, Aeropuerto destino) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("AddVuelo.fxml"));
+            Parent root = loader.load();
+            AddVueloFXMLController vueloController = loader.getController();
+            vueloController.setGrafo(grafo);
+            vueloController.setOrigenDestino(origen, destino);
+
+            Stage stage = new Stage();
+            stage.setTitle("Agregar Vuelo");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+
+            dibujarGrafo(); // Redibuja las aristas actualizadas
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

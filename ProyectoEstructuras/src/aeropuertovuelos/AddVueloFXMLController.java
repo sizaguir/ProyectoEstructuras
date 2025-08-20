@@ -50,4 +50,15 @@ public class AddVueloFXMLController {
             lblMensaje.setText("⚠️ El peso debe ser un número");
         }
     }
+    
+    public void setOrigenDestino(Aeropuerto origen, Aeropuerto destino){
+        cbOrigen.getItems().clear();
+        cbDestino.getItems().clear();
+        cbOrigen.getItems().add(origen);
+        cbDestino.getItems().add(destino);
+        cbOrigen.setValue(origen);
+        cbDestino.setValue(destino);
+        cbOrigen.setDisable(true);
+        cbDestino.setDisable(true);
+    }
 }
