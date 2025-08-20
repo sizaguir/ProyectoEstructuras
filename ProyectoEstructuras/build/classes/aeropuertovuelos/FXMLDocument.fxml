@@ -46,6 +46,12 @@
                     <MenuItem text="Buscar Ruta" onAction="#buscarRuta"/>
                 </items>
             </Menu>
+            <Menu text="Estadísticas">
+                <items>
+                  <MenuItem text="Ver estadísticas" onAction="#abrirEstadisticas"/>
+                </items>
+              </Menu>
+
         </menus>
       </MenuBar>
    </bottom>

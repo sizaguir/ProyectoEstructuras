@@ -286,7 +286,29 @@ private void buscarRuta(ActionEvent event) {
         e.printStackTrace();
         new Alert(Alert.AlertType.ERROR, "No se pudo abrir la ventana de Buscar Ruta.").showAndWait();
     }
-}
+    }
+
+    @FXML
+    private void abrirEstadisticas(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("Estadisticas.fxml"));
+            Parent root = loader.load();
+
+            EstadisticasFXMLController controller = loader.getController();
+            controller.setGrafo(grafo);
+
+            Stage stage = new Stage();
+            stage.setTitle("Estadísticas");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.initOwner(grafoPane.getScene().getWindow());
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "No se pudo abrir la ventana de Estadísticas.").showAndWait();
+        }
+    }
+
 
 
 }
