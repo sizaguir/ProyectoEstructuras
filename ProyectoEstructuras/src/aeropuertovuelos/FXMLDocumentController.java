@@ -98,10 +98,14 @@ public class FXMLDocumentController implements Initializable {
             }
 
             Circle nodo = new Circle(cx, cy, 15, Color.CORNFLOWERBLUE);
-            nodo.setOnMouseClicked(e -> e.consume()); // evita propagación del clic
+            nodo.setOnMouseClicked(e -> {
+            abrirPantallaVuelos(a);  // <-- aquí llamas al método
+            e.consume();
+            });
+
             grafoPane.getChildren().add(nodo);
             nodosVisuales.put(a, nodo);
-        }
+
 
         // Dibujar aristas con flecha
         for (Aeropuerto origen : grafo.getAeropuertos()) {
@@ -151,6 +155,7 @@ public class FXMLDocumentController implements Initializable {
                     grafoPane.getChildren().add(arrowHead);
                 }
             }
+        }
         }
     }
     
@@ -235,6 +240,25 @@ public class FXMLDocumentController implements Initializable {
         }
     }
 
+    private void abrirPantallaVuelos(Aeropuerto aeropuerto) {
+    try {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("MostrarVuelos.fxml"));
+        Parent root = loader.load();
+
+        // Pasar datos al controlador de MostrarVuelos
+        MostrarVuelosFXMLController controller = loader.getController();
+        controller.setDatos(aeropuerto, grafo);
+
+        Stage stage = new Stage();
+        stage.setTitle("Vuelos desde " + aeropuerto.getNombre());
+        stage.setScene(new Scene(root));
+        stage.show();
+
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+}
+    
     @FXML
     private void buscarRuta(ActionEvent event) {
     }
