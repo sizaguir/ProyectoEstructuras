@@ -36,8 +36,8 @@ public class AddVueloFXMLController {
 
         try {
             double peso = Double.parseDouble(txtPeso.getText());
-
             grafo.agregarVuelo(origen, destino, peso, aerolinea);
+            DatosVuelos.guardarDatos(grafo);
             lblMensaje.setText("✅ Vuelo agregado correctamente");
 
             // limpiar campos
@@ -49,16 +49,5 @@ public class AddVueloFXMLController {
         } catch (NumberFormatException e) {
             lblMensaje.setText("⚠️ El peso debe ser un número");
         }
-    }
-    
-    public void setOrigenDestino(Aeropuerto origen, Aeropuerto destino){
-        cbOrigen.getItems().clear();
-        cbDestino.getItems().clear();
-        cbOrigen.getItems().add(origen);
-        cbDestino.getItems().add(destino);
-        cbOrigen.setValue(origen);
-        cbDestino.setValue(destino);
-        cbOrigen.setDisable(true);
-        cbDestino.setDisable(true);
     }
 }

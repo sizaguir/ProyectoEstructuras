@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
@@ -16,4 +19,22 @@
    <center>
       <AnchorPane fx:id="grafoPane" onMouseClicked="#handleAnchorPaneClick" prefHeight="516.0" prefWidth="866.0" BorderPane.alignment="CENTER" />
    </center>
+   <bottom>
+      <MenuBar BorderPane.alignment="CENTER">
+        <menus>
+          <Menu mnemonicParsing="false" text="Vuelo">
+            <items>
+              <MenuItem fx:id="añadirVuelo" mnemonicParsing="false" onAction="#agregarVuelo" text="Agregar Vuelo" />
+                  <MenuItem mnemonicParsing="false" text="Eliminar Vuelo" />
+            </items>
+          </Menu>
+          <Menu mnemonicParsing="false" text="Aeropuerto">
+            <items>
+              <MenuItem mnemonicParsing="false" text="Eliminar Aeropuerto" />
+            </items>
+          </Menu>
+            <Menu mnemonicParsing="false" text="Buscar Ruta" />
+        </menus>
+      </MenuBar>
+   </bottom>
 </BorderPane>
