@@ -23,6 +23,14 @@ public class EliminarVueloFXMLController {
 
     private GrafoVuelos grafo;
     private ObservableList<Vuelo> listaVuelos;
+    @FXML
+    private TableColumn<Vuelo, String> colPaís;
+    @FXML
+    private TableColumn<Vuelo, String> colCiudad;
+    @FXML
+    private TableColumn<Vuelo, String> colPaísDest;
+    @FXML
+    private TableColumn<Vuelo, String> colCiudadDest;
 
     // Recibir el grafo desde la ventana principal
     public void setGrafo(GrafoVuelos grafo) {
@@ -35,8 +43,16 @@ public class EliminarVueloFXMLController {
 
         colOrigen.setCellValueFactory(data ->
             new javafx.beans.property.SimpleStringProperty(data.getValue().getOrigen().getCodigo()));
+        colPaís.setCellValueFactory(data ->
+            new javafx.beans.property.SimpleStringProperty(data.getValue().getOrigen().getPais()));
+        colCiudad.setCellValueFactory(data ->
+            new javafx.beans.property.SimpleStringProperty(data.getValue().getOrigen().getCiudad()));
         colDestino.setCellValueFactory(data ->
             new javafx.beans.property.SimpleStringProperty(data.getValue().getDestino().getCodigo()));
+        colPaís.setCellValueFactory(data ->
+            new javafx.beans.property.SimpleStringProperty(data.getValue().getDestino().getPais()));
+        colCiudad.setCellValueFactory(data ->
+            new javafx.beans.property.SimpleStringProperty(data.getValue().getDestino().getCiudad()));
         colPeso.setCellValueFactory(data ->
             new javafx.beans.property.SimpleObjectProperty<>(data.getValue().getPeso()));
         colAerolinea.setCellValueFactory(data ->
@@ -59,6 +75,7 @@ public class EliminarVueloFXMLController {
 
         grafo.eliminarVuelo(vueloSeleccionado.getOrigen(), vueloSeleccionado.getDestino());
         listaVuelos.remove(vueloSeleccionado);
+        DatosVuelos.guardarDatos(grafo);
 
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Vuelo eliminado");
