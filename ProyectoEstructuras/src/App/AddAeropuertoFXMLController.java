@@ -2,9 +2,11 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXMLController.java to edit this template
  */
-package aeropuertovuelos;
+package App;
 
 import aeropuertovuelos.Aeropuerto;
+import aeropuertovuelos.Aeropuerto;
+import aeropuertovuelos.GrafoVuelos;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;

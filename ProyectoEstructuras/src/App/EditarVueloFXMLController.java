@@ -1,5 +1,7 @@
-package aeropuertovuelos;
+package App;
 
+import aeropuertovuelos.Aeropuerto;
+import aeropuertovuelos.GrafoVuelos;
 import javafx.fxml.FXML;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;

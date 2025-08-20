@@ -1,5 +1,7 @@
-package aeropuertovuelos;
+package App;
 
+import aeropuertovuelos.GrafoVuelos;
+import aeropuertovuelos.Vuelo;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;

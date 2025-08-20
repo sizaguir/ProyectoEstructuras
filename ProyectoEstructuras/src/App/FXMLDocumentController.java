@@ -1,4 +1,4 @@
-package aeropuertovuelos;
+package App;
 
 import java.io.IOException;
 import javafx.event.ActionEvent;
