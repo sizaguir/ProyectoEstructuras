@@ -10,25 +10,15 @@ public class EliminarVueloFXMLController {
 
     @FXML
     private TableView<Vuelo> tablaVuelos;
-    @FXML
     private TableColumn<Vuelo, String> colOrigen;
-    @FXML
     private TableColumn<Vuelo, String> colDestino;
-    @FXML
     private TableColumn<Vuelo, Double> colPeso;
-    @FXML
     private TableColumn<Vuelo, String> colAerolinea;
 
     private GrafoVuelos grafo;
     private ObservableList<Vuelo> listaVuelos;
-    @FXML
     private TableColumn<Vuelo, String> colPaís;
-    @FXML
     private TableColumn<Vuelo, String> colCiudad;
-    @FXML
-    private TableColumn<Vuelo, String> colPaísDest;
-    @FXML
-    private TableColumn<Vuelo, String> colCiudadDest;
 
     // Recibir el grafo desde la ventana principal
     public void setGrafo(GrafoVuelos grafo) {

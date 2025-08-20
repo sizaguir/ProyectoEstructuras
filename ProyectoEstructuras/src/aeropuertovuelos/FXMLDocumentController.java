@@ -216,6 +216,23 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void eliminarAeropuerto(ActionEvent event) {
+        try {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("EliminarAeropuerto.fxml"));
+        Parent root = loader.load();
+
+        EliminarAeropuertoController controller = loader.getController();
+        controller.setGrafo(grafo);
+
+        Stage stage = new Stage();
+        stage.setTitle("Eliminar Aeropuerto");
+        stage.setScene(new Scene(root));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.showAndWait();
+        
+        dibujarGrafo();
+        } catch (IOException e) {
+        e.printStackTrace();
+        }
     }
 
     @FXML
