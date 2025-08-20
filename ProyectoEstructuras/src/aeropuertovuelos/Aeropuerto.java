@@ -9,12 +9,17 @@ public class Aeropuerto {
     private String pais;     // Ej: "China"
     private double latitud;  // Opcional para visualización
     private double longitud; // Opcional para visualización
+    // Coordenadas para dibujar en el grafo
+    private double x;
+    private double y;
 
     public Aeropuerto(String codigo, String nombre, String ciudad, String pais) {
         this.codigo = codigo;
         this.nombre = nombre;
         this.ciudad = ciudad;
         this.pais = pais;
+        this.x=0.0;
+        this.y=0.0;
     }
 
     public Aeropuerto(String codigo, String nombre, String ciudad, String pais, double latitud, double longitud) {
@@ -66,6 +71,22 @@ public class Aeropuerto {
         this.longitud = longitud; 
     }
 
+    public double getX() {
+        return x;
+    }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+    
     @Override
     public String toString() {
         return nombre + " (" + codigo + ") - " + ciudad + ", " + pais;
