@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1"
+      xmlns="http://javafx.com/javafx/24.0.1"
+      fx:controller="aeropuertovuelos.EstadisticasFXMLController"
+      spacing="12" alignment="CENTER_LEFT" style="-fx-padding: 16;">
+    
+    <Label text="📊 Estadísticas de la red de vuelos" style="-fx-font-size: 18; -fx-font-weight: bold;"/>
+
+    <GridPane hgap="12" vgap="6">
+        <columnConstraints>
+            <ColumnConstraints percentWidth="35"/>
+            <ColumnConstraints percentWidth="65"/>
+        </columnConstraints>
+
+        <Label text="Aeropuertos:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
+        <Label fx:id="lblAeropuertos" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
+
+        <Label text="Vuelos totales:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
+        <Label fx:id="lblVuelos" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
+
+        <Label text="Aeropuerto más conectado:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
+        <Label fx:id="lblMasConectado" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
+
+        <Label text="Aeropuerto menos conectado:" GridPane.rowIndex="3" GridPane.columnIndex="0"/>
+        <Label fx:id="lblMenosConectado" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
+
+        <Label text="Promedio conexiones por aeropuerto:" GridPane.rowIndex="4" GridPane.columnIndex="0"/>
+        <Label fx:id="lblPromedio" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
+    </GridPane>
+
+    <Label text="Conectividad por aeropuerto" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
+
+    <TableView fx:id="tabla" prefHeight="280" prefWidth="650">
+        <columns>
+            <TableColumn fx:id="colAeropuerto" text="Aeropuerto" prefWidth="250"/>
+            <TableColumn fx:id="colSalientes" text="Salientes" prefWidth="120"/>
+            <TableColumn fx:id="colEntrantes" text="Entrantes" prefWidth="120"/>
+            <TableColumn fx:id="colTotal" text="Total" prefWidth="120"/>
+        </columns>
+    </TableView>
+
+    <HBox spacing="8">
+        <Button text="Cerrar" onAction="#cerrar"/>
+    </HBox>
+</VBox>

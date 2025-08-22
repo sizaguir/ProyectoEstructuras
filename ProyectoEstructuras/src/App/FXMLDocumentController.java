@@ -4,7 +4,7 @@
  */
 package App;
 
-import App.AddAeropuertoFXMLController;
+import App.BuscarRutaFXMLController;
 import aeropuertovuelos.Aeropuerto;
 import aeropuertovuelos.DatosVuelos;
 import aeropuertovuelos.GrafoVuelos;
@@ -18,8 +18,10 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Menu;
@@ -53,6 +55,8 @@ public class FXMLDocumentController implements Initializable {
     private MenuItem eliminarAeropuerto;
     @FXML
     private Menu buscarRuta;
+    @FXML
+    private MenuItem editarVuelo;
 
     
     
@@ -103,10 +107,14 @@ public class FXMLDocumentController implements Initializable {
             }
 
             Circle nodo = new Circle(cx, cy, 15, Color.CORNFLOWERBLUE);
-            nodo.setOnMouseClicked(e -> e.consume()); // evita propagación del clic
+            nodo.setOnMouseClicked(e -> {
+            abrirPantallaVuelos(a);  // <-- aquí llamas al método
+            e.consume();
+            });
+
             grafoPane.getChildren().add(nodo);
             nodosVisuales.put(a, nodo);
-        }
+
 
         // Dibujar aristas con flecha
         for (Aeropuerto origen : grafo.getAeropuertos()) {
@@ -156,6 +164,7 @@ public class FXMLDocumentController implements Initializable {
                     grafoPane.getChildren().add(arrowHead);
                 }
             }
+        }
         }
     }
     
@@ -221,9 +230,90 @@ public class FXMLDocumentController implements Initializable {
 
     @FXML
     private void eliminarAeropuerto(ActionEvent event) {
+        try {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("EliminarAeropuerto.fxml"));
+        Parent root = loader.load();
+
+        EliminarAeropuertoController controller = loader.getController();
+        controller.setGrafo(grafo);
+
+        Stage stage = new Stage();
+        stage.setTitle("Eliminar Aeropuerto");
+        stage.setScene(new Scene(root));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.showAndWait();
+        
+        dibujarGrafo();
+        } catch (IOException e) {
+        e.printStackTrace();
+        }
+    }
+
+    private void abrirPantallaVuelos(Aeropuerto aeropuerto) {
+    try {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("MostrarVuelos.fxml"));
+        Parent root = loader.load();
+
+        // Pasar datos al controlador de MostrarVuelos
+        MostrarVuelosFXMLController controller = loader.getController();
+        controller.setDatos(aeropuerto, grafo);
+
+        Stage stage = new Stage();
+        stage.setTitle("Vuelos desde " + aeropuerto.getNombre());
+        stage.setScene(new Scene(root));
+        stage.show();
+
+    } catch (IOException e) {
+        e.printStackTrace();
+    }
+    }
+    
+    @FXML
+private void buscarRuta(ActionEvent event) {
+    try {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("BuscarRuta.fxml"));
+        Scene scene = new Scene(loader.load());
+
+        // Pasamos el grafo a la ventana BuscarRuta
+        BuscarRutaFXMLController controller = loader.getController();
+        controller.setGrafo(grafo);
+
+        Stage stage = new Stage();
+        stage.setTitle("Buscar Ruta");
+        stage.setScene(scene);
+        stage.initModality(Modality.WINDOW_MODAL);
+
+        // Usamos el grafoPane (que sí es un Node visible en la escena principal)
+        stage.initOwner(grafoPane.getScene().getWindow());
+        stage.show();
+
+    } catch (IOException e) {
+        e.printStackTrace();
+        new Alert(Alert.AlertType.ERROR, "No se pudo abrir la ventana de Buscar Ruta.").showAndWait();
+    }
     }
 
     @FXML
-    private void buscarRuta(ActionEvent event) {
+    private void abrirEstadisticas(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("Estadisticas.fxml"));
+            Parent root = loader.load();
+
+            EstadisticasFXMLController controller = loader.getController();
+            controller.setGrafo(grafo);
+
+            Stage stage = new Stage();
+            stage.setTitle("Estadísticas");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.initOwner(grafoPane.getScene().getWindow());
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            new Alert(Alert.AlertType.ERROR, "No se pudo abrir la ventana de Estadísticas.").showAndWait();
+        }
     }
+
+
+
 }
