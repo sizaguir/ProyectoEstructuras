@@ -1,41 +1,39 @@
 # Archivo .gitignore
-# Archivos de NetBeans
-nbproject/private/
-build/
-nbbuild/
-dist/
-nbdist/
-*.log
-*.tmp
-*.tgz
+# Archivo .gitignore CORREGIDO
 
-# Archivos compilados de Java
-*.class
-*.jar
-*.war
-*.ear
+# NetBeans - IGNORAR TODO nbproject EXCEPTO project.xml
+ProyectoEstructuras/nbproject/private/
+ProyectoEstructuras/nbproject/configs/
+ProyectoEstructuras/nbproject/*.properties
+ProyectoEstructuras/nbproject/build-impl.xml
+ProyectoEstructuras/nbproject/jfx-impl.xml
+ProyectoEstructuras/build.xml
+ProyectoEstructuras/manifest.mf
+!ProyectoEstructuras/nbproject/project.xml
 
-# Archivos de IDE
-.idea/
-*.iml
-*.ipr
-*.iws
-.vscode/
-*.swp
-*.swo
+# Build files
+ProyectoEstructuras/build/
+ProyectoEstructuras/nbbuild/
+ProyectoEstructuras/dist/
+ProyectoEstructuras/nbdist/
 
-# Archivos del sistema
+# Compiled classes
+ProyectoEstructuras/*.class
+ProyectoEstructuras/build/classes/**/*.class
+
+# System files
 .DS_Store
 Thumbs.db
-
+*.log
+*.tmp
 # Logs y reports
 logs/
 *.log
 test-output/
 
 # Archivos de configuración local
-nbproject/private/private.properties
-nbproject/private/private.xml
+ProyectoEstructuras/nbproject/private/private.properties
+ProyectoEstructuras/nbproject/private/private.xml
 
 # Archivos de backup
 *.backup
