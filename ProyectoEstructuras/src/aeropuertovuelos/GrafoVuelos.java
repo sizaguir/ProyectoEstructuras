@@ -3,11 +3,13 @@ package aeropuertovuelos;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.TreeMap;
 
@@ -132,7 +134,8 @@ public class GrafoVuelos implements Serializable{
     
     public List<Vuelo> getVuelosPorAerolinea(String aerolinea) {
         if (vuelosPorAerolinea.containsKey(aerolinea)) {
-            return vuelosPorAerolinea.get(aerolinea);
+            return new ArrayList<>(vuelosPorAerolinea.get(aerolinea)); 
+        // se devuelve una copia para evitar modificar la lista interna
         }
         return Collections.emptyList();
     }
@@ -184,6 +187,22 @@ public class GrafoVuelos implements Serializable{
         return false; // No se encontró vuelo entre origen y destino
     }
     
+    // Simular los itinerarios de vuelos en orden de salida usando PriorityQueue
+    public void simularItinerarios() {
+        // Cola de prioridad por hora de salida
+        PriorityQueue<Vuelo> cola = new PriorityQueue<>(Comparator.comparingInt(Vuelo::getHoraSalida));
+
+        // Agregar todos los vuelos a la cola
+        for (Vuelo v : getTodosLosVuelos()) {
+            cola.add(v);
+        }
+
+        System.out.println("=== Simulación de Itinerarios ===");
+        while (!cola.isEmpty()) {
+            Vuelo vuelo = cola.poll();
+            System.out.println("Procesando vuelo: " + vuelo);
+        }
+    }
     
 }
 
