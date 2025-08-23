@@ -13,13 +13,14 @@ import java.util.PriorityQueue;
 import java.util.Set;
 import java.util.TreeMap;
 
-public class GrafoVuelos implements Serializable{
+public class GrafoVuelos implements Serializable {
+
     private Map<Aeropuerto, List<Vuelo>> vuelos;
     private Set<Aeropuerto> aeropuertos;
-    
+
     // Árbol de búsqueda por aerolínea
     private TreeMap<String, List<Vuelo>> vuelosPorAerolinea;
-    
+
     public GrafoVuelos() {
         this.aeropuertos = new HashSet<>();
         this.vuelos = new HashMap<>();
@@ -27,7 +28,7 @@ public class GrafoVuelos implements Serializable{
     }
 
     // Agregar un aeropuerto (nodo)         
-     public void agregarAeropuerto(Aeropuerto a) {
+    public void agregarAeropuerto(Aeropuerto a) {
         if (!aeropuertos.contains(a)) {
             aeropuertos.add(a);
 
@@ -37,7 +38,7 @@ public class GrafoVuelos implements Serializable{
             }
         }
     }
-    
+
     // Eliminar un aeropuerto y sus vuelos asociados      
     public void eliminarAeropuerto(Aeropuerto a) {
         aeropuertos.remove(a);
@@ -103,7 +104,7 @@ public class GrafoVuelos implements Serializable{
     }
 
     // Obtener todos los aeropuertos
-     public Set<Aeropuerto> getAeropuertos() {
+    public Set<Aeropuerto> getAeropuertos() {
         return aeropuertos;
     }
 
@@ -116,12 +117,12 @@ public class GrafoVuelos implements Serializable{
     }
 
     // Verificar si un aeropuerto existe
-   // Verificar si un aeropuerto existe en el grafo
+    // Verificar si un aeropuerto existe en el grafo
     public boolean contieneAeropuerto(Aeropuerto aeropuerto) {
         return aeropuertos.contains(aeropuerto);
     }
-    
-   // Obtener una lista con todos los vuelos del grafo
+
+    // Obtener una lista con todos los vuelos del grafo
     public List<Vuelo> getTodosLosVuelos() {
         List<Vuelo> todos = new ArrayList<>();
 
@@ -131,15 +132,15 @@ public class GrafoVuelos implements Serializable{
 
         return todos;
     }
-    
+
     public List<Vuelo> getVuelosPorAerolinea(String aerolinea) {
         if (vuelosPorAerolinea.containsKey(aerolinea)) {
-            return new ArrayList<>(vuelosPorAerolinea.get(aerolinea)); 
-        // se devuelve una copia para evitar modificar la lista interna
+            return new ArrayList<>(vuelosPorAerolinea.get(aerolinea));
+            // se devuelve una copia para evitar modificar la lista interna
         }
         return Collections.emptyList();
     }
-       
+
     // Verificar si existe un vuelo entre dos aeropuertos
     public boolean existeVuelo(Aeropuerto origen, Aeropuerto destino) {
         if (!vuelos.containsKey(origen)) {
@@ -154,8 +155,8 @@ public class GrafoVuelos implements Serializable{
         }
         return false; // no se encontró
     }
-  
-   // Editar un vuelo (modifica peso y aerolínea)
+
+    // Editar un vuelo (modifica peso y aerolínea)
     public boolean editarVuelo(Aeropuerto origen, Aeropuerto destino, double nuevoPeso, String nuevaAerolinea) {
         if (!vuelos.containsKey(origen)) {
             return false; // No hay vuelos desde ese origen
@@ -186,7 +187,7 @@ public class GrafoVuelos implements Serializable{
         }
         return false; // No se encontró vuelo entre origen y destino
     }
-    
+
     // Simular los itinerarios de vuelos en orden de salida usando PriorityQueue
     public void simularItinerarios() {
         // Cola de prioridad por hora de salida
@@ -203,6 +204,39 @@ public class GrafoVuelos implements Serializable{
             System.out.println("Procesando vuelo: " + vuelo);
         }
     }
-    
-}
 
+    // Número de conexiones (vuelos salientes) por aeropuerto
+    public int getNumConexiones(Aeropuerto a) {
+        return vuelos.getOrDefault(a, Collections.emptyList()).size();
+    }
+
+    // FUNCIONES ESTADISTICAS
+    // Aeropuerto más conectado
+    public Aeropuerto getAeropuertoMasConectado() {
+        return aeropuertos.stream()
+                .max(Comparator.comparingInt(this::getNumConexiones))
+                .orElse(null);
+    }
+
+    // Aeropuerto menos conectado  
+    public Aeropuerto getAeropuertoMenosConectado() {
+        return aeropuertos.stream()
+                .min(Comparator.comparingInt(this::getNumConexiones))
+                .orElse(null);
+    }
+
+    // Todas las rutas más cortas desde un origen (para estadísticas)
+    public Map<Aeropuerto, Rutas.RutaResultado> todasLasRutasDesde(Aeropuerto origen) {
+        Map<Aeropuerto, Rutas.RutaResultado> resultados = new HashMap<>();
+        Rutas rutas = new Rutas(this);
+
+        for (Aeropuerto destino : aeropuertos) {
+            if (!origen.equals(destino)) {
+                resultados.put(destino, rutas.dijkstra(origen, destino));
+            }
+        }
+
+        return resultados;
+    }
+
+}

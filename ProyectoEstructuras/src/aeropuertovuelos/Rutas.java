@@ -12,10 +12,15 @@ public class Rutas {
 
     /**
      * Encuentra la ruta más corta usando Dijkstra
+     *
      * @param origen Aeropuerto inicial
      * @param destino Aeropuerto final
      * @return Objeto RutaResultado con la distancia y el camino
      */
+    /*
+    //Esta implementacion deberia reconsiderarse por la que no esta comentada en la línea
+    //Explicacion: https://www.notion.so/Explicacion-de-problema-con-el-algoritmo-Dijkstra-25878dc0e08480dd81e6e19fec03183e?source=copy_link
+    
     public RutaResultado dijkstra(Aeropuerto origen, Aeropuerto destino) {
         Map<Aeropuerto, Double> distancias = new HashMap<>();
         Map<Aeropuerto, Aeropuerto> predecesores = new HashMap<>();
@@ -51,6 +56,62 @@ public class Rutas {
             camino.add(0, paso);
             paso = predecesores.get(paso);
         }
+
+        return new RutaResultado(camino, distancias.get(destino));
+    }*/
+
+    public RutaResultado dijkstra(Aeropuerto origen, Aeropuerto destino) {
+        Map<Aeropuerto, Double> distancias = new HashMap<>();
+        Map<Aeropuerto, Aeropuerto> predecesores = new HashMap<>();
+        Set<Aeropuerto> visitados = new HashSet<>();
+
+        PriorityQueue<Aeropuerto> cola = new PriorityQueue<>(
+                Comparator.comparingDouble(distancias::get)
+        );
+
+        for (Aeropuerto a : grafo.getAeropuertos()) {
+            distancias.put(a, Double.POSITIVE_INFINITY);
+        }
+        distancias.put(origen, 0.0);
+        cola.add(origen);
+
+        while (!cola.isEmpty()) {
+            Aeropuerto actual = cola.poll();
+            if (visitados.contains(actual)) {
+                continue;
+            }
+            visitados.add(actual);
+
+            if (actual.equals(destino)) {
+                break;
+            }
+
+            for (Vuelo vuelo : grafo.getVuelosDesde(actual)) {
+                Aeropuerto vecino = vuelo.getDestino();
+                if (visitados.contains(vecino)) {
+                    continue;
+                }
+
+                double nuevaDist = distancias.get(actual) + vuelo.getPeso();
+
+                if (nuevaDist < distancias.get(vecino)) {
+                    distancias.put(vecino, nuevaDist);
+                    predecesores.put(vecino, actual);
+                    cola.add(vecino); // Reagregar para reordenar
+                }
+            }
+        }
+
+        // Reconstruir camino y manejar destino inalcanzable
+        if (distancias.get(destino) == Double.POSITIVE_INFINITY) {
+            return new RutaResultado(Collections.emptyList(), Double.POSITIVE_INFINITY);
+        }
+
+        List<Aeropuerto> camino = new ArrayList<>();
+        for (Aeropuerto at = destino; at != null; at = predecesores.get(at)) {
+            camino.add(at);
+        }
+        Collections.reverse(camino);
 
         return new RutaResultado(camino, distancias.get(destino));
     }

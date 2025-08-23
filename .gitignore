@@ -1,0 +1,47 @@
+# Archivo .gitignore
+# Archivos de NetBeans
+nbproject/private/
+build/
+nbbuild/
+dist/
+nbdist/
+*.log
+*.tmp
+*.tgz
+
+# Archivos compilados de Java
+*.class
+*.jar
+*.war
+*.ear
+
+# Archivos de IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+*.swp
+*.swo
+
+# Archivos del sistema
+.DS_Store
+Thumbs.db
+
+# Logs y reports
+logs/
+*.log
+test-output/
+
+# Archivos de configuración local
+nbproject/private/private.properties
+nbproject/private/private.xml
+
+# Archivos de backup
+*.backup
+*.bak
+
+# Archivos de usuario
+*.suo
+*.user
+*.userosscache

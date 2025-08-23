@@ -1,8 +1,10 @@
 package aeropuertovuelos;
 
 import java.io.Serializable;
+import java.util.Objects;
 
-public class Vuelo implements Serializable{
+public class Vuelo implements Serializable {
+
     private Aeropuerto origen;
     private Aeropuerto destino;
     private double peso; // Puede ser distancia en km, costo o tiempo en horas
@@ -17,11 +19,15 @@ public class Vuelo implements Serializable{
     }
 
     public Vuelo(Aeropuerto origen, Aeropuerto destino, double peso, String aerolinea) {
-        this(origen, destino, peso);
-        this.aerolinea = aerolinea;
+        this.origen = Objects.requireNonNull(origen);
+        this.destino = Objects.requireNonNull(destino);
+        this.peso = peso;
+        this.aerolinea = Objects.requireNonNull(aerolinea);
+        this.horaSalida = 0;
+        this.horaLlegada = 0;
     }
-    
-     public Vuelo(Aeropuerto origen, Aeropuerto destino, double peso, String aerolinea, int horaSalida, int horaLlegada) {
+
+    public Vuelo(Aeropuerto origen, Aeropuerto destino, double peso, String aerolinea, int horaSalida, int horaLlegada) {
         this.origen = origen;
         this.destino = destino;
         this.peso = peso;
@@ -31,55 +37,58 @@ public class Vuelo implements Serializable{
     }
 
     // Getters y setters
-    public Aeropuerto getOrigen() { 
-        return origen; 
-    }
-    public void setOrigen(Aeropuerto origen) { 
-        this.origen = origen; 
+    public Aeropuerto getOrigen() {
+        return origen;
     }
 
-    public Aeropuerto getDestino() { 
-        return destino; 
-    }
-    public void setDestino(Aeropuerto destino) { 
-        this.destino = destino; 
+    public void setOrigen(Aeropuerto origen) {
+        this.origen = origen;
     }
 
-    public double getPeso() { 
-        return peso; 
-    }
-    public void setPeso(double peso) { 
-        this.peso = peso; 
+    public Aeropuerto getDestino() {
+        return destino;
     }
 
-    public String getAerolinea() { 
-        return aerolinea; 
+    public void setDestino(Aeropuerto destino) {
+        this.destino = destino;
     }
-    public void setAerolinea(String aerolinea) { 
-        this.aerolinea = aerolinea; 
+
+    public double getPeso() {
+        return peso;
     }
-    
-    public int getHoraSalida() { 
-        return horaSalida; 
+
+    public void setPeso(double peso) {
+        this.peso = peso;
     }
-    
-    public int getHoraLlegada() { 
-        return horaLlegada; 
+
+    public String getAerolinea() {
+        return aerolinea;
     }
-    
-    public void setHoraSalida(int horaSalida) { 
-        this.horaSalida = horaSalida; 
+
+    public void setAerolinea(String aerolinea) {
+        this.aerolinea = aerolinea;
     }
-    
-    public void setHoraLlegada(int horaLlegada) { 
-        this.horaLlegada = horaLlegada; 
+
+    public int getHoraSalida() {
+        return horaSalida;
+    }
+
+    public int getHoraLlegada() {
+        return horaLlegada;
+    }
+
+    public void setHoraSalida(int horaSalida) {
+        this.horaSalida = horaSalida;
+    }
+
+    public void setHoraLlegada(int horaLlegada) {
+        this.horaLlegada = horaLlegada;
     }
 
 //    @Override
 //    public String toString() {
 //        return origen.getCodigo() + " → " + destino.getCodigo() + " | " + peso + " | " + aerolinea;
 //    }
-    
     @Override
     public String toString() {
         return origen.getCodigo() + " -> " + destino.getCodigo() + " | " + aerolinea + " | Salida: " + formatearHora(horaSalida) + " | Llegada: " + formatearHora(horaLlegada);
