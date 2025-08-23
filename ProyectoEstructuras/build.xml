@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="ProyectoEstructuras" default="default" basedir=".">
+    <description>Builds, tests, and runs the project ProyectoEstructuras.</description>
+    <import file="nbproject/build-impl.xml"/>
+    
+    <!-- ========== CONFIGURACIÓN PARA JAVA FX ========== -->
+    
+    <!-- Sobrescribir compilación para copiar recursos FXML -->
+    <target name="-post-compile">
+        <copy todir="${build.classes.dir}">
+            <fileset dir="${src.dir}">
+                <include name="**/*.fxml"/>
+                <include name="**/*.css"/>
+                <include name="**/*.png"/>
+                <include name="**/*.jpg"/>
+                <include name="**/*.txt"/>
+            </fileset>
+        </copy>
+        <echo message="✅ Recursos FXML copiados a: ${build.classes.dir}"/>
+    </target>
+
+    <!-- Reemplaza el target -post-clean con esto: -->
+    <target name="-post-clean">
+        <delete includeemptydirs="true" quiet="true">
+            <fileset dir="${build.classes.dir}" includes="**/*"/>
+        </delete>
+        <echo message="✅ Carpeta build/classes limpiada (si existía)"/>
+    </target>
+
+    <!-- Sobrescribir ejecución para JavaFX -->
+    <target name="run" depends="jar">
+        <java fork="true" classname="${main.class}">
+            <jvmarg value="--module-path"/>
+            <jvmarg value="C:\Users\USER\Documents\javafx-sdk-24.0.2\lib"/>
+            <jvmarg value="--add-modules"/>
+            <jvmarg value="javafx.controls,javafx.fxml"/>
+            <jvmarg value="--enable-native-access"/>
+            <jvmarg value="javafx.graphics"/>
+            <arg line="${application.args}"/>
+            <classpath>
+                <path path="${run.classpath}"/>
+            </classpath>
+        </java>
+    </target>
+
+    <!-- Sobrescribir debug para JavaFX -->
+    <target name="debug" depends="jar">
+        <java fork="true" classname="${main.class}">
+            <jvmarg value="--module-path"/>
+            <jvmarg value="C:\Users\USER\Documents\javafx-sdk-24.0.2\lib"/>
+            <jvmarg value="--add-modules"/>
+            <jvmarg value="javafx.controls,javafx.fxml"/>
+            <jvmarg value="--enable-native-access"/>
+            <jvmarg value="javafx.graphics"/>
+            <jvmarg value="-agentlib:jdwp=transport=dt_socket,server=n,address=${debug.transport}"/>
+            <arg line="${application.args}"/>
+            <classpath>
+                <path path="${run.classpath}"/>
+            </classpath>
+        </java>
+    </target>
+
+    <!-- Sobrescribir creación de JAR -->
+    <target name="jar" depends="compile">
+        <jar destfile="${dist.jar}">
+            <fileset dir="${build.classes.dir}"/>
+            <fileset dir="${src.dir}">
+                <include name="**/*.fxml"/>
+                <include name="**/*.css"/>
+            </fileset>
+            <manifest>
+                <attribute name="Main-Class" value="${main.class}"/>
+                <attribute name="Class-Path" value="${manifest.classpath}"/>
+            </manifest>
+        </jar>
+        <echo message="✅ JAR creado: ${dist.jar}"/>
+    </target>
+
+    <!-- Target para compilar y copiar recursos -->
+    <target name="compile-and-copy">
+        <antcall target="compile"/>
+        <antcall target="-post-compile"/>
+    </target>
+
+</project>

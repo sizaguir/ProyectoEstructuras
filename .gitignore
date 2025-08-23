@@ -1,45 +1,55 @@
-# Archivo .gitignore
-# Archivo .gitignore CORREGIDO
+# Archivo .gitignore para Proyecto NetBeans Ant con JavaFX
 
-# NetBeans - IGNORAR TODO nbproject EXCEPTO project.xml
-ProyectoEstructuras/nbproject/private/
-ProyectoEstructuras/nbproject/configs/
-ProyectoEstructuras/nbproject/*.properties
-ProyectoEstructuras/nbproject/build-impl.xml
-ProyectoEstructuras/nbproject/jfx-impl.xml
-ProyectoEstructuras/build.xml
-ProyectoEstructuras/manifest.mf
-!ProyectoEstructuras/nbproject/project.xml
-
-# Build files
-ProyectoEstructuras/build/
-ProyectoEstructuras/nbbuild/
-ProyectoEstructuras/dist/
-ProyectoEstructuras/nbdist/
-
-# Compiled classes
-ProyectoEstructuras/*.class
-ProyectoEstructuras/build/classes/**/*.class
-
-# System files
-.DS_Store
-Thumbs.db
+# IGNORAR - Archivos generados por NetBeans
+build/
+dist/
+nbbuild/
+nbdist/
 *.log
 *.tmp
-# Logs y reports
+*.tgz
+
+# IGNORAR - Archivos compilados
+*.class
+*.jar
+*.war
+*.ear
+
+# IGNORAR - Configuraciones locales de NetBeans
+nbproject/private/
+
+# IGNORAR - Datos locales (cada desarrollador tiene su copia)
+aeropuertos.txt
+vuelos.txt
+
+# IGNORAR - Archivos del sistema
+.DS_Store
+Thumbs.db
+*.bak
+*.backup
+
+# IGNORAR - Logs y reports
 logs/
-*.log
 test-output/
 
-# Archivos de configuración local
-ProyectoEstructuras/nbproject/private/private.properties
-ProyectoEstructuras/nbproject/private/private.xml
+# PERMITIR - Estos archivos SON NECESARIOS (NO ignorar)
+!nbproject/project.xml
+!nbproject/build-impl.xml
+!nbproject/genfiles.properties
+!build.xml
+!manifest.mf
 
-# Archivos de backup
-*.backup
-*.bak
+# PERMITIR - Carpeta src con todo su contenido
+!src/
+src/**/*
+!src/App/
+!src/App/*.java
+!src/App/*.fxml
+!src/aeropuertovuelos/
+!src/aeropuertovuelos/*.java
+!src/resources/
+!src/resources/*.fxml
 
-# Archivos de usuario
-*.suo
-*.user
-*.userosscache
+# PERMITIR - Carpeta test
+!test/
+test/**/*
