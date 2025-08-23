@@ -1,8 +1,9 @@
 package aeropuertovuelos;
 
+import java.io.Serializable;
 import java.util.Objects;
 
-public class Aeropuerto {
+public class Aeropuerto implements Serializable{
     private String codigo;   // Ej: "PKX"
     private String nombre;   // Ej: "Aeropuerto Internacional de Daxing"
     private String ciudad;   // Ej: "Pekín"
@@ -23,7 +24,10 @@ public class Aeropuerto {
     }
 
     public Aeropuerto(String codigo, String nombre, String ciudad, String pais, double latitud, double longitud) {
-        this(codigo, nombre, ciudad, pais);
+        this.codigo = codigo;
+        this.nombre = nombre;
+        this.ciudad = ciudad;
+        this.pais = pais;
         this.latitud = latitud;
         this.longitud = longitud;
     }
@@ -96,12 +100,12 @@ public class Aeropuerto {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Aeropuerto)) return false;
-        Aeropuerto that = (Aeropuerto) o;
-        return Objects.equals(codigo, that.codigo);
-    }
-
+        Aeropuerto other = (Aeropuerto) o;
+        return codigo.equals(other.codigo);        
+    }   
+    
     @Override
     public int hashCode() {
-        return Objects.hash(codigo);
+        return codigo.hashCode();
     }
 }
