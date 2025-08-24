@@ -4,7 +4,7 @@ import java.util.List;
 
 public class Utilitarios {
     
-     // Distribuye aeropuertos según latitud/longitud escaladas al tamaño del canvas
+     // Distribuye aeropuertos según latitud/longitud escaladas
     public static void distribuirPorCoordenadas(List<Aeropuerto> aeropuertos, double ancho, double alto) {
         if (aeropuertos.isEmpty()) return;
 
