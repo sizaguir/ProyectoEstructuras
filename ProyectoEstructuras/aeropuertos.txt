@@ -1,0 +1,5 @@
+ISO;Aeropuerto Aislado;Isla;Desconocido;0.0;0.0;0.0;0.0
+LHR;Aeropuerto de Heathrow;Londres;Reino Unido;51.47;-0.4543;0.0;0.0
+CDG;Aeropuerto de Paris-Charles de Gaulle;Paris;Francia;49.0097;2.5478;0.0;0.0
+PKX;Aeropuerto Internacional de Daxing;Pekin;China;39.5098;116.4106;0.0;0.0
+DXB;Aeropuerto Internacional de Dubai;Dubai;Emiratos arabes;25.2532;55.3657;0.0;0.0

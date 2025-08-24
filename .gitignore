@@ -1,56 +1,26 @@
-# Archivo .gitignore para Proyecto NetBeans Ant con JavaFX
+# Archivos compilados
+*.class
+*.war
+*.ear
 
-# IGNORAR - Archivos generados por NetBeans
+# Carpetas de build
 build/
 dist/
 nbbuild/
 nbdist/
-*.log
-*.tmp
-*.tgz
 
-# IGNORAR - Archivos compilados
-*.class
-*.jar
-*.war
-*.ear
-
-# IGNORAR - Configuraciones locales de NetBeans
+# Archivos de configuración personal (no compartidos)
 nbproject/private/
+nbproject/genfiles.properties
 
-# IGNORAR - Datos locales (cada desarrollador tiene su copia)
-aeropuertos.txt
-vuelos.txt
+# Logs
+*.log
 
-# IGNORAR - Archivos del sistema
+# Archivos temporales
+*.tmp
+*.bak
+*.swp
+
+# Archivos de sistema
 .DS_Store
 Thumbs.db
-*.bak
-*.backup
-
-# IGNORAR - Logs y reports
-logs/
-test-output/
-
-# PERMITIR - Estos archivos SON NECESARIOS (NO ignorar)
-!nbproject/project.xml
-!nbproject/build-impl.xml
-!nbproject/genfiles.properties
-!build.xml
-!manifest.mf
-
-# PERMITIR - Carpeta src con todo su contenido
-!src/
-src/**/*
-!src/App/
-!src/App/*.java
-!src/App/*.fxml
-!src/aeropuertovuelos/
-!src/aeropuertovuelos/*.java
-!src/resources/
-!src/resources/*.fxml
-
-# PERMITIR - Carpeta test
-!test/
-test/**/*
-/ProyectoEstructuras/nbproject/private/

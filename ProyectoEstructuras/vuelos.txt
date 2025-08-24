@@ -1,0 +1,3 @@
+LHR;CDG;350.0;Air France
+CDG;DXB;5200.0;Emirates
+DXB;PKX;5800.0;Emirates
