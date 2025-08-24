@@ -84,14 +84,13 @@ public class MostrarVuelosFXMLController {
     }
 
     @FXML
-    private void editarVuelo() {
+    private void editarVuelo() throws IOException {
         Vuelo vuelo = tablaVuelos.getSelectionModel().getSelectedItem();
         if (vuelo == null) {
             new Alert(Alert.AlertType.WARNING, "Selecciona un vuelo primero.").showAndWait();
             return;
         }
 
-        try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("EditarVuelo.fxml"));
             Scene scene = new Scene(loader.load());
 
@@ -110,11 +109,6 @@ public class MostrarVuelosFXMLController {
             tablaVuelos.setItems(FXCollections.observableArrayList(
                     grafo.getVuelosDesde(aeropuerto)
             ));
-
-        } catch (IOException e) {
-            e.printStackTrace();
-            new Alert(Alert.AlertType.ERROR, "No se pudo abrir la ventana de edición.").showAndWait();
-        }
     }
 
     @FXML

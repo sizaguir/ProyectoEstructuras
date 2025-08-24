@@ -70,12 +70,8 @@ public class AddAeropuertoFXMLController implements Initializable {
             alert.showAndWait();
             return;
         }
-        
-        double lat, lon;
-        try {
-            lat = Double.parseDouble(latStr);
-            lon = Double.parseDouble(lonStr);
-        } catch (NumberFormatException e) {
+
+        if(!esNumero(latStr) || !esNumero(lonStr)){
             Alert alert = new Alert(Alert.AlertType.ERROR);
             alert.setTitle("Error en formato");
             alert.setHeaderText(null);
@@ -84,6 +80,11 @@ public class AddAeropuertoFXMLController implements Initializable {
             return;
         }
         
+        double lat, lon;
+       
+            lat = Double.parseDouble(latStr);
+            lon = Double.parseDouble(lonStr);
+
         Aeropuerto aeropuerto = new Aeropuerto(codigo, nombre, ciudad, pais, lat, lon);
         aeropuerto.setX(posX);
         aeropuerto.setY(posY);
@@ -137,6 +138,11 @@ public class AddAeropuertoFXMLController implements Initializable {
     public void setPosicion(double x, double y) {
         this.posX = x;
         this.posY= y;
+    }
+    
+    //Para que valide si es número
+    private boolean esNumero(String texto) {
+        return texto.matches("\\d+(\\.\\d+)?"); //Para que acepte decimales y enteros
     }
     
 }

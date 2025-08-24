@@ -52,9 +52,15 @@ public class EditarVueloFXMLController {
             Aeropuerto origen = cmbOrigen.getValue();
             Aeropuerto destino = cmbDestino.getValue();
             String aerolinea = txtAerolinea.getText();
+            String pesoTexto= txtPeso.getText();
 
-            if (origen == null || destino == null || txtPeso.getText().isEmpty() || aerolinea.isEmpty()) {
+            if (origen == null || destino == null || pesoTexto.isEmpty() || aerolinea.isEmpty()) {
                 throw new IllegalArgumentException("Todos los campos son obligatorios");
+            }
+            
+            if (!esNumero(pesoTexto)) {
+            new Alert(Alert.AlertType.ERROR, "⚠ El peso debe ser un número válido.").showAndWait();
+            return;
             }
 
             double peso = Double.parseDouble(txtPeso.getText());
@@ -78,9 +84,7 @@ public class EditarVueloFXMLController {
             alert.showAndWait();
         }
     }
-
-
-
+    
     @FXML
     private void cancelar() {
         cerrarVentana();
@@ -89,5 +93,10 @@ public class EditarVueloFXMLController {
     private void cerrarVentana() {
         Stage stage = (Stage) txtPeso.getScene().getWindow();
         stage.close();
+    }
+    
+    //Para que valide si es número
+    private boolean esNumero(String texto) {
+        return texto.matches("\\d+(\\.\\d+)?"); //Para que acepte decimales y enteros
     }
 }
