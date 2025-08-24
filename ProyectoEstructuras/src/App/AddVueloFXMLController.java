@@ -30,26 +30,33 @@ public class AddVueloFXMLController {
         Aeropuerto origen = cbOrigen.getValue();
         Aeropuerto destino = cbDestino.getValue();
         String aerolinea = txtAerolinea.getText();
+        String pesoTexto = txtPeso.getText();
 
-        if (origen == null || destino == null || txtPeso.getText().isEmpty() || aerolinea.isEmpty()) {
+        if (origen == null || destino == null || pesoTexto.isEmpty() || aerolinea.isEmpty()) {
             lblMensaje.setText("⚠️ Todos los campos son obligatorios");
             return;
         }
 
-        try {
-            double peso = Double.parseDouble(txtPeso.getText());
-
-            grafo.agregarVuelo(origen, destino, peso, aerolinea);
-            lblMensaje.setText("✅ Vuelo agregado correctamente");
-
-            // limpiar campos
-            cbOrigen.setValue(null);
-            cbDestino.setValue(null);
-            txtPeso.clear();
-            txtAerolinea.clear();
-
-        } catch (NumberFormatException e) {
+        if (!esNumero(pesoTexto)) {
             lblMensaje.setText("⚠️ El peso debe ser un número");
+            return;
         }
+
+        double peso = Double.parseDouble(pesoTexto);
+
+        grafo.agregarVuelo(origen, destino, peso, aerolinea);
+        lblMensaje.setText("✅ Vuelo agregado correctamente");
+
+        // limpia los campos
+        cbOrigen.setValue(null);
+        cbDestino.setValue(null);
+        txtPeso.clear();
+        txtAerolinea.clear();
+    }
+
+    //Para que valide si es número
+    private boolean esNumero(String texto) {
+        return texto.matches("\\d+(\\.\\d+)?"); //Para que acepte decimales y enteros
     }
 }
+

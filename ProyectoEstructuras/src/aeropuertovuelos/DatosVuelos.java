@@ -1,6 +1,7 @@
 package aeropuertovuelos;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -18,7 +19,7 @@ public class DatosVuelos {
      * Guarda la información del grafo en archivos de texto.
      */
     public static void guardarDatos(GrafoVuelos grafo) {
-         try (PrintWriter pwA = new PrintWriter(new FileWriter(ARCHIVO_AEROPUERTOS));
+         try (PrintWriter pwA = new PrintWriter(new FileWriter(ARCHIVO_AEROPUERTOS)); //try/catch obligatorio
              PrintWriter pwV = new PrintWriter(new FileWriter(ARCHIVO_VUELOS))) {
 
             // Guardar aeropuertos
@@ -42,55 +43,88 @@ public class DatosVuelos {
 
     /**
      * Carga la información desde archivos y la inserta en el grafo.
+     * @return 
      */
     public static GrafoVuelos cargarDatos() {
         GrafoVuelos grafo = new GrafoVuelos();
         Map<String, Aeropuerto> mapaAeropuertos = new HashMap<>();
 
-        try (BufferedReader brA = new BufferedReader(new FileReader(ARCHIVO_AEROPUERTOS))) {
-            String linea;
-            while ((linea = brA.readLine()) != null) {
-                String[] partes = linea.split(";");
-                Aeropuerto a = new Aeropuerto(
-                        partes[0], // código
-                        partes[1], // nombre
-                        partes[2], // ciudad
-                        partes[3], // país
-                        Double.parseDouble(partes[4]), // latitud
-                        Double.parseDouble(partes[5])  // longitud
-                );
-                // Cargar posiciones x e y si existen
-                if (partes.length > 7) {
-                    a.setX(Double.parseDouble(partes[6]));
-                    a.setY(Double.parseDouble(partes[7]));
+        // --- Leer aeropuertos ---
+        File fileA = new File(ARCHIVO_AEROPUERTOS);
+        if (fileA.exists()) {
+            BufferedReader brA = null;
+            try {
+                brA = new BufferedReader(new FileReader(fileA));
+                String linea;
+                while ((linea = brA.readLine()) != null) {
+                    linea = linea.trim();
+                    if (linea.isEmpty()) continue;
+
+                    String[] partes = linea.split(";");
+                    if (partes.length >= 6 && esNumero(partes[4]) && esNumero(partes[5])) {
+                        Aeropuerto a = new Aeropuerto(
+                            partes[0], partes[1], partes[2], partes[3],
+                            Double.parseDouble(partes[4]), Double.parseDouble(partes[5])
+                        );
+                        if (partes.length > 7 && esNumero(partes[6]) && esNumero(partes[7])) {
+                            a.setX(Double.parseDouble(partes[6]));
+                            a.setY(Double.parseDouble(partes[7]));
+                        }
+                        grafo.agregarAeropuerto(a);
+                        mapaAeropuertos.put(a.getCodigo(), a);
+                    } else {
+                        System.out.println("Línea de aeropuerto vacía o incompleta ignorada: " + linea);
+                    }
                 }
-                grafo.agregarAeropuerto(a);
-                mapaAeropuertos.put(a.getCodigo(), a);
+                brA.close();
+            } catch (IOException | NumberFormatException e) {
+                System.out.println("Error inesperado al leer aeropuertos.");
             }
-        } catch (FileNotFoundException e) {
-            System.out.println("Archivo de aeropuertos no encontrado, iniciando vacío.");
-        } catch (IOException e) {
-            System.err.println("Error al leer aeropuertos: " + e.getMessage());
+        } else {
+            System.out.println("Archivo aeropuertos.txt no encontrado, grafo vacío.");
         }
 
-        try (BufferedReader brV = new BufferedReader(new FileReader(ARCHIVO_VUELOS))) {
-            String linea;
-            while ((linea = brV.readLine()) != null) {
-                String[] partes = linea.split(";");
-                Aeropuerto origen = mapaAeropuertos.get(partes[0]);
-                Aeropuerto destino = mapaAeropuertos.get(partes[1]);
-                double peso = Double.parseDouble(partes[2]);
-                String aerolinea = partes.length > 3 ? partes[3] : null;
-                if (origen != null && destino != null) {
-                    grafo.agregarVuelo(origen, destino, peso, aerolinea);
+        // --- Leer vuelos ---
+        File fileV = new File(ARCHIVO_VUELOS);
+        if (fileV.exists()) {
+            BufferedReader brV = null;
+            try {
+                brV = new BufferedReader(new FileReader(fileV));
+                String linea;
+                while ((linea = brV.readLine()) != null) {
+                    linea = linea.trim();
+                    if (linea.isEmpty()) continue;
+
+                    String[] partes = linea.split(";");
+                    if (partes.length >= 3 && esNumero(partes[2])) {
+                        Aeropuerto origen = mapaAeropuertos.get(partes[0]);
+                        Aeropuerto destino = mapaAeropuertos.get(partes[1]);
+                        if (origen != null && destino != null) {
+                            double peso = Double.parseDouble(partes[2]);
+                            String aerolinea = partes.length > 3 ? partes[3] : null;
+                            grafo.agregarVuelo(origen, destino, peso, aerolinea);
+                        } else {
+                            System.out.println("Vuelo con aeropuertos desconocidos ignorado: " + linea);
+                        }
+                    } else {
+                        System.out.println("Línea de vuelo vacía o incompleta ignorada: " + linea);
+                    }
                 }
+                brV.close();
+            } catch (IOException | NumberFormatException e) {
+                System.out.println("Error inesperado al leer vuelos.");
             }
-        } catch (FileNotFoundException e) {
-            System.out.println("Archivo de vuelos no encontrado, iniciando vacío.");
-        } catch (IOException e) {
-            System.err.println("Error al leer vuelos: " + e.getMessage());
+        } else {
+            System.out.println("Archivo vuelos.txt no encontrado, grafo vacío.");
         }
 
         return grafo;
     }
+
+    // --- Método auxiliar para validar números ---
+    private static boolean esNumero(String str) {
+        if (str == null || str.isEmpty()) return false;
+        return str.matches("-?\\d+(\\.\\d+)?");
+    }
 }
+

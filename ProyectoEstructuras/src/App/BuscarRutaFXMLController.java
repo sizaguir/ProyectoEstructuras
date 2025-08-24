@@ -64,6 +64,4 @@ public class BuscarRutaFXMLController {
     private void cerrarVentana() {
         ((Stage) listaRuta.getScene().getWindow()).close();
     }
-
-    
 }
