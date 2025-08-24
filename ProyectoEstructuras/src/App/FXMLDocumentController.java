@@ -8,10 +8,13 @@ import App.BuscarRutaFXMLController;
 import aeropuertovuelos.Aeropuerto;
 import aeropuertovuelos.DatosVuelos;
 import aeropuertovuelos.GrafoVuelos;
+import aeropuertovuelos.Utilitarios;
 import aeropuertovuelos.Vuelo;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
@@ -84,7 +87,86 @@ public class FXMLDocumentController implements Initializable {
         e.printStackTrace();
         }
     }
-    
+//    //con metodo de utilitarios
+//    private void dibujarGrafo() {
+//        grafoPane.getChildren().clear();
+//        nodosVisuales.clear();
+//
+//        // Paso 1: aplicar distribución de aeropuertos
+//        List<Aeropuerto> lista = new ArrayList<>(grafo.getAeropuertos());
+//
+//        //  Usa coordenadas geográficas escaladas al tamaño del AnchorPane
+//        Utilitarios.distribuirPorCoordenadas(lista, grafoPane.getWidth(), grafoPane.getHeight());
+//
+//        // Si quieres probar en círculo:
+//        // Utilitarios.distribuirEnCirculo(lista, grafoPane.getWidth() / 2, grafoPane.getHeight() / 2, 200);
+//
+//        // Paso 2: Dibujar nodos (aeropuertos)
+//        for (Aeropuerto a : lista) {
+//            double cx = a.getX();
+//            double cy = a.getY();
+//
+//            Circle nodo = new Circle(cx, cy, 15, Color.CORNFLOWERBLUE);
+//            nodo.setOnMouseClicked(e -> {
+//                abrirPantallaVuelos(a);  // abre los vuelos de ese aeropuerto
+//                e.consume();
+//            });
+//
+//            grafoPane.getChildren().add(nodo);
+//            nodosVisuales.put(a, nodo);
+//        }
+//
+//        // Paso 3: Dibujar aristas (vuelos con flechas)
+//        for (Aeropuerto origen : grafo.getAeropuertos()) {
+//            for (Vuelo v : grafo.getVuelosDesde(origen)) {
+//                Circle cOrigen = nodosVisuales.get(origen);
+//                Circle cDestino = nodosVisuales.get(v.getDestino());
+//                if (cOrigen != null && cDestino != null) {
+//                    double x1 = cOrigen.getCenterX();
+//                    double y1 = cOrigen.getCenterY();
+//                    double x2 = cDestino.getCenterX();
+//                    double y2 = cDestino.getCenterY();
+//
+//                    // Ajustar salida/entrada en borde del círculo
+//                    double dx = x2 - x1;
+//                    double dy = y2 - y1;
+//                    double dist = Math.sqrt(dx * dx + dy * dy);
+//                    double r = cOrigen.getRadius();
+//                    double r2 = cDestino.getRadius();
+//                    double startX = x1 + dx * r / dist;
+//                    double startY = y1 + dy * r / dist;
+//                    double endX = x2 - dx * r2 / dist;
+//                    double endY = y2 - dy * r2 / dist;
+//
+//                    // Línea
+//                    Line linea = new Line(startX, startY, endX, endY);
+//                    linea.setStrokeWidth(2);
+//                    linea.setStroke(Color.GRAY);
+//                    grafoPane.getChildren().add(linea);
+//
+//                    // Flecha
+//                    double angle = Math.atan2(endY - startY, endX - startX);
+//                    double arrowLength = 12;
+//                    double arrowWidth = 6;
+//
+//                    Polygon arrowHead = new Polygon();
+//                    arrowHead.getPoints().addAll(
+//                        0.0, 0.0,
+//                        -arrowLength, -arrowWidth / 2,
+//                        -arrowLength, arrowWidth / 2
+//                    );
+//                    arrowHead.setFill(Color.GRAY);
+//
+//                    arrowHead.setLayoutX(endX);
+//                    arrowHead.setLayoutY(endY);
+//                    arrowHead.setRotate(Math.toDegrees(angle));
+//
+//                    grafoPane.getChildren().add(arrowHead);
+//                }
+//            }
+//        }
+//    }
+
     private void dibujarGrafo() {
         grafoPane.getChildren().clear();
         nodosVisuales.clear();
