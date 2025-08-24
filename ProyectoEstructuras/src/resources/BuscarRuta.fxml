@@ -5,7 +5,7 @@
 
 <VBox xmlns:fx="http://javafx.com/fxml/1"
       xmlns="http://javafx.com/javafx/24.0.1"
-      fx:controller="aeropuertovuelos.BuscarRutaFXMLController"
+      fx:controller="App.BuscarRutaFXMLController"
       spacing="10" alignment="CENTER" style="-fx-padding: 20;">
     
     <Label text="Buscar Ruta entre Aeropuertos" style="-fx-font-size: 18;"/>

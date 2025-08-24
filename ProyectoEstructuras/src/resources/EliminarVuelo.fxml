@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/24.0.1" fx:controller="aeropuertovuelos.EliminarVueloFXMLController">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/24.0.1" fx:controller="App.EliminarVueloFXMLController">
     <center>
         <VBox alignment="CENTER" prefHeight="376.0" prefWidth="885.0" spacing="10" style="-fx-padding: 20;">
             <TableView fx:id="tablaVuelos" prefHeight="300" prefWidth="833.0">

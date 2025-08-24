@@ -5,7 +5,7 @@
 
 <BorderPane xmlns:fx="http://javafx.com/fxml/1"
             xmlns="http://javafx.com/javafx/24.0.1"
-            fx:controller="aeropuertovuelos.MostrarVuelosFXMLController">
+            fx:controller="App.MostrarVuelosFXMLController">
 
     <top>
         <Label fx:id="tituloLabel" text="Vuelos del Aeropuerto"

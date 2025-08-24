@@ -68,7 +68,7 @@ public class FXMLDocumentController implements Initializable {
 
     private void abrirAgregarAeropuertoHandler(double posX, double posY) {
         try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("AddAeropuertoFXML.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/AddAeropuertoFXML.fxml"));
         Parent root = loader.load();
         AddAeropuertoFXMLController addController = loader.getController();
         addController.setGrafo(grafo);
@@ -189,7 +189,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void agregarVuelo(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("AddVuelo.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/AddVuelo.fxml"));
             Parent root = loader.load();
             AddVueloFXMLController vueloController = loader.getController();
             vueloController.setGrafo(grafo);
@@ -209,7 +209,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void eliminarVuelo(ActionEvent event) {
         try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("EliminarVuelo.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/EliminarVuelo.fxml"));
         Parent root = loader.load();
 
         EliminarVueloFXMLController controller = loader.getController();
@@ -231,7 +231,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
     private void eliminarAeropuerto(ActionEvent event) {
         try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("EliminarAeropuerto.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/EliminarAeropuerto.fxml"));
         Parent root = loader.load();
 
         EliminarAeropuertoController controller = loader.getController();
@@ -251,7 +251,7 @@ public class FXMLDocumentController implements Initializable {
 
     private void abrirPantallaVuelos(Aeropuerto aeropuerto) {
     try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("MostrarVuelos.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/MostrarVuelos.fxml"));
         Parent root = loader.load();
 
         // Pasar datos al controlador de MostrarVuelos
@@ -271,7 +271,7 @@ public class FXMLDocumentController implements Initializable {
     @FXML
 private void buscarRuta(ActionEvent event) {
     try {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("BuscarRuta.fxml"));
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/BuscarRuta.fxml"));
         Scene scene = new Scene(loader.load());
 
         // Pasamos el grafo a la ventana BuscarRuta
@@ -296,7 +296,7 @@ private void buscarRuta(ActionEvent event) {
     @FXML
     private void abrirEstadisticas(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("Estadisticas.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/Estadisticas.fxml"));
             Parent root = loader.load();
 
             EstadisticasFXMLController controller = loader.getController();

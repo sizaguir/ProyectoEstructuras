@@ -9,7 +9,7 @@
 
 <VBox xmlns:fx="http://javafx.com/fxml/1"
       xmlns="http://javafx.com/javafx/8"
-      fx:controller="aeropuertovuelos.EditarVueloFXMLController"
+      fx:controller="App.EditarVueloFXMLController"
       alignment="CENTER" spacing="10" style="-fx-padding:20;">
 
     <ComboBox fx:id="cmbOrigen" promptText="Origen"/>
