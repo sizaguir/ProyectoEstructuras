@@ -22,6 +22,6 @@
     <Label fx:id="labelDistancia" style="-fx-font-size: 14; -fx-font-weight: bold;"/>
     
     <ListView fx:id="listaRuta" prefHeight="200" prefWidth="400"/>
-
+    <Button text="Exportar a PDF" onAction="#exportarPDF" layoutX="20" layoutY="300"/>
     <Button text="Cerrar" onAction="#cerrarVentana"/>
 </VBox>

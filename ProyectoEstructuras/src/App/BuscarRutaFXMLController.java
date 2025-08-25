@@ -1,12 +1,16 @@
 package App;
 
 import aeropuertovuelos.Aeropuerto;
+import aeropuertovuelos.ExportarPDF;
 import aeropuertovuelos.GrafoVuelos;
 import aeropuertovuelos.Rutas;
+import java.io.File;
+import java.io.IOException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 public class BuscarRutaFXMLController {
@@ -64,4 +68,37 @@ public class BuscarRutaFXMLController {
     private void cerrarVentana() {
         ((Stage) listaRuta.getScene().getWindow()).close();
     }
+    
+    @FXML
+    private void exportarPDF() throws IOException, com.itextpdf.text.DocumentException {
+        Aeropuerto origen = comboOrigen.getValue();
+        Aeropuerto destino = comboDestino.getValue();
+
+        if (origen == null || destino == null) {
+            new Alert(Alert.AlertType.WARNING, "Primero selecciona origen y destino.").showAndWait();
+            return;
+        }
+
+        Rutas rutas = new Rutas(grafo);
+        Rutas.RutaResultado resultado = rutas.dijkstra(origen, destino);
+
+        if (resultado.getCamino().isEmpty() || resultado.getDistanciaTotal() == Double.POSITIVE_INFINITY) {
+            new Alert(Alert.AlertType.WARNING, "No hay ruta disponible para exportar.").showAndWait();
+            return;
+        }
+
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Guardar Ruta en PDF");
+        fileChooser.getExtensionFilters().add(
+                new FileChooser.ExtensionFilter("Archivos PDF", "*.pdf")
+        );
+        File file = fileChooser.showSaveDialog(comboOrigen.getScene().getWindow());
+
+        if (file != null) {
+            ExportarPDF.exportarRuta(resultado, file.getAbsolutePath());
+            new Alert(Alert.AlertType.INFORMATION, "Ruta exportada correctamente a PDF.").showAndWait();
+        }
+    }
+
+    
 }
