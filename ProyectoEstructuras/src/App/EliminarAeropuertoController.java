@@ -40,10 +40,14 @@ public class EliminarAeropuertoController implements Initializable {
     
     private GrafoVuelos grafo;
     private ObservableList<Aeropuerto> listaAeropuertos;
+    private FXMLDocumentController mainController;
 
     /**
      * Initializes the controller class.
      */
+    public void setMainController(FXMLDocumentController mainController) {
+        this.mainController = mainController;
+    }
     
     public void setGrafo(GrafoVuelos grafo) {
         this.grafo = grafo;
@@ -106,6 +110,10 @@ public class EliminarAeropuertoController implements Initializable {
 
         // Guardar cambios
         DatosVuelos.guardarDatos(grafo);
+        
+        if(mainController != null) {
+        mainController.dibujarGrafo();
+    }
 
         // Mensaje de éxito
         Alert alert = new Alert(Alert.AlertType.INFORMATION);

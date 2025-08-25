@@ -109,7 +109,7 @@ public class FXMLDocumentController implements Initializable {
         });
     }
 
-    private void dibujarGrafo() {
+    void dibujarGrafo() {
         // Limpia nodos y aristas anteriores (excepto la imagen de fondo)
         mapaGroup.getChildren().removeIf(node -> node != mapaView && !(node instanceof Circle && nodosVisuales.containsValue(node)) && !(node instanceof Line || node instanceof Polygon || node instanceof Label));
         nodosVisuales.clear();
@@ -239,6 +239,7 @@ public class FXMLDocumentController implements Initializable {
 
             EliminarAeropuertoController controller = loader.getController();
             controller.setGrafo(grafo);
+            controller.setMainController(this);
 
             Stage stage = new Stage();
             stage.setTitle("Eliminar Aeropuerto");
