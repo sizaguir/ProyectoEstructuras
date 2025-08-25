@@ -1,37 +1,26 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/javafx/FXML2.java to edit this template
- */
 package App;
 
-import App.BuscarRutaFXMLController;
 import aeropuertovuelos.Aeropuerto;
 import aeropuertovuelos.DatosVuelos;
 import aeropuertovuelos.GrafoVuelos;
 import aeropuertovuelos.Utilitarios;
 import aeropuertovuelos.Vuelo;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.control.Menu;
-import javafx.scene.control.MenuButton;
-import javafx.scene.control.MenuItem;
+import javafx.scene.control.Tooltip;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
@@ -41,224 +30,94 @@ import javafx.scene.shape.Polygon;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-/**
- *
- * @author arife
- */
 public class FXMLDocumentController implements Initializable {
     
-    private Label label;
-    @FXML
-    private MenuItem añadirVuelo;
-    @FXML
-    private AnchorPane grafoPane;
+    @FXML private AnchorPane grafoPane;
     private GrafoVuelos grafo;
     private Map<Aeropuerto, Circle> nodosVisuales = new HashMap<>();
-    @FXML
-    private MenuItem eliminarVuelo;
-    @FXML
-    private MenuItem eliminarAeropuerto;
-    @FXML
-    private Menu buscarRuta;
-    @FXML
-    private MenuItem editarVuelo;
+    private ImageView mapaView;
 
-    
-    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        grafo = DatosVuelos.cargarDatos(); //Carga aeropuertos y vuelos desde los archivos
-        dibujarGrafo(); // Función que dibuja nodos y líneas en el AnchorPane
-    }    
+        grafo = DatosVuelos.cargarDatos(); // carga archivos
+        // Fondo de mapa
+        mapaView = new ImageView(new Image(getClass().getResourceAsStream("/resources/mapa.png")));
+        mapaView.setPreserveRatio(true);
+        mapaView.setOpacity(0.25);
+        grafoPane.getChildren().add(0, mapaView);
 
-    private void abrirAgregarAeropuertoHandler(double posX, double posY) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/AddAeropuertoFXML.fxml"));
-        Parent root = loader.load();
-        AddAeropuertoFXMLController addController = loader.getController();
-        addController.setGrafo(grafo);
-        addController.setMainController(this);
-        addController.setPosicion(posX, posY);
-        
-        Stage stage = new Stage();
-        stage.setTitle("Agregar Aeropuerto");
-        stage.setScene(new Scene(root));
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.showAndWait();
-        
+        // Redibujar al cambiar tamaño
+        grafoPane.widthProperty().addListener((o,ov,nv) -> redibujar());
+        grafoPane.heightProperty().addListener((o,ov,nv) -> redibujar());
+
+        redibujar();
+    }
+
+    private void redibujar() {
+        mapaView.setFitWidth(grafoPane.getWidth());
+        mapaView.setFitHeight(grafoPane.getHeight());
         dibujarGrafo();
     }
-//    //con metodo de utilitarios
-//    private void dibujarGrafo() {
-//        grafoPane.getChildren().clear();
-//        nodosVisuales.clear();
-//
-//        // Paso 1: aplicar distribución de aeropuertos
-//        List<Aeropuerto> lista = new ArrayList<>(grafo.getAeropuertos());
-//
-//        //  Usa coordenadas geográficas escaladas al tamaño del AnchorPane
-//        Utilitarios.distribuirPorCoordenadas(lista, grafoPane.getWidth(), grafoPane.getHeight());
-//
-//        // Si quieres probar en círculo:
-//        // Utilitarios.distribuirEnCirculo(lista, grafoPane.getWidth() / 2, grafoPane.getHeight() / 2, 200);
-//
-//        // Paso 2: Dibujar nodos (aeropuertos)
-//        for (Aeropuerto a : lista) {
-//            double cx = a.getX();
-//            double cy = a.getY();
-//
-//            Circle nodo = new Circle(cx, cy, 15, Color.CORNFLOWERBLUE);
-//            nodo.setOnMouseClicked(e -> {
-//                abrirPantallaVuelos(a);  // abre los vuelos de ese aeropuerto
-//                e.consume();
-//            });
-//
-//            grafoPane.getChildren().add(nodo);
-//            nodosVisuales.put(a, nodo);
-//        }
-//
-//        // Paso 3: Dibujar aristas (vuelos con flechas)
-//        for (Aeropuerto origen : grafo.getAeropuertos()) {
-//            for (Vuelo v : grafo.getVuelosDesde(origen)) {
-//                Circle cOrigen = nodosVisuales.get(origen);
-//                Circle cDestino = nodosVisuales.get(v.getDestino());
-//                if (cOrigen != null && cDestino != null) {
-//                    double x1 = cOrigen.getCenterX();
-//                    double y1 = cOrigen.getCenterY();
-//                    double x2 = cDestino.getCenterX();
-//                    double y2 = cDestino.getCenterY();
-//
-//                    // Ajustar salida/entrada en borde del círculo
-//                    double dx = x2 - x1;
-//                    double dy = y2 - y1;
-//                    double dist = Math.sqrt(dx * dx + dy * dy);
-//                    double r = cOrigen.getRadius();
-//                    double r2 = cDestino.getRadius();
-//                    double startX = x1 + dx * r / dist;
-//                    double startY = y1 + dy * r / dist;
-//                    double endX = x2 - dx * r2 / dist;
-//                    double endY = y2 - dy * r2 / dist;
-//
-//                    // Línea
-//                    Line linea = new Line(startX, startY, endX, endY);
-//                    linea.setStrokeWidth(2);
-//                    linea.setStroke(Color.GRAY);
-//                    grafoPane.getChildren().add(linea);
-//
-//                    // Flecha
-//                    double angle = Math.atan2(endY - startY, endX - startX);
-//                    double arrowLength = 12;
-//                    double arrowWidth = 6;
-//
-//                    Polygon arrowHead = new Polygon();
-//                    arrowHead.getPoints().addAll(
-//                        0.0, 0.0,
-//                        -arrowLength, -arrowWidth / 2,
-//                        -arrowLength, arrowWidth / 2
-//                    );
-//                    arrowHead.setFill(Color.GRAY);
-//
-//                    arrowHead.setLayoutX(endX);
-//                    arrowHead.setLayoutY(endY);
-//                    arrowHead.setRotate(Math.toDegrees(angle));
-//
-//                    grafoPane.getChildren().add(arrowHead);
-//                }
-//            }
-//        }
-//    }
 
-    
-    
     private void dibujarGrafo() {
-        grafoPane.getChildren().clear();
+        grafoPane.getChildren().remove(1, grafoPane.getChildren().size());
         nodosVisuales.clear();
 
-        double defaultX = 50, defaultY = 50;
-        double deltaX = 120, deltaY = 80;
-        int i = 0;
+        // 1) calcular posiciones por lat/lon
+        List<Aeropuerto> lista = new ArrayList<>(grafo.getAeropuertos());
+        Utilitarios.distribuirPorCoordenadas(lista, grafoPane.getWidth(), grafoPane.getHeight());
 
-        // Dibujar nodos
-        for (Aeropuerto a : grafo.getAeropuertos()) {
-            double cx = a.getX();
-            double cy = a.getY();
-
-            if (cx == 0 && cy == 0) {
-                cx = defaultX + (i % 5) * deltaX;
-                cy = defaultY + (i / 5) * deltaY;
-                a.setX(cx);
-                a.setY(cy);
-                i++;
-            }
-
-            Circle nodo = new Circle(cx, cy, 15, Color.CORNFLOWERBLUE);
-            
-            nodo.setOnMouseClicked(e -> {
-                try {//try/catch obligatorio
-                    abrirPantallaVuelos(a);//aquí llama al método
-                } catch (IOException ex) {
-                    Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            e.consume();
-            });
+        // 2) dibujar nodos
+        for (Aeropuerto a : lista) {
+            double cx = a.getX(), cy = a.getY();
+            Circle nodo = new Circle(cx, cy, 14, Color.CORNFLOWERBLUE);
+            Tooltip.install(nodo, new Tooltip(a.getNombre()+" ("+a.getCodigo()+")\n"+a.getCiudad()+", "+a.getPais()));
+            nodo.setOnMouseClicked(e -> { abrirPantallaVuelos(a); e.consume(); });
 
             grafoPane.getChildren().add(nodo);
             nodosVisuales.put(a, nodo);
+        }
 
+        // 3) dibujar aristas
+        for (Aeropuerto origen : lista) {
+            for (Vuelo v : grafo.getVuelosDesde(origen)) {
+                Aeropuerto destino = v.getDestino();
+                Circle n1 = nodosVisuales.get(origen);
+                Circle n2 = nodosVisuales.get(destino);
+                if (n1 == null || n2 == null) continue;
 
-            // Dibujar aristas con flecha
-            for (Aeropuerto origen : grafo.getAeropuertos()) {
-                for (Vuelo v : grafo.getVuelosDesde(origen)) {
-                    Circle cOrigen = nodosVisuales.get(origen);
-                    Circle cDestino = nodosVisuales.get(v.getDestino());
-                    if (cOrigen != null && cDestino != null) {
-                        double x1 = cOrigen.getCenterX();
-                        double y1 = cOrigen.getCenterY();
-                        double x2 = cDestino.getCenterX();
-                        double y2 = cDestino.getCenterY();
+                Line l = new Line(n1.getCenterX(), n1.getCenterY(), n2.getCenterX(), n2.getCenterY());
+                l.setStrokeWidth(1.5);
+                l.setStroke(Color.GRAY);
 
-                        // Ajustar para que línea salga del borde del círculo
-                        double dx = x2 - x1;
-                        double dy = y2 - y1;
-                        double dist = Math.sqrt(dx*dx + dy*dy);
-                        double r = cOrigen.getRadius();
-                        double r2 = cDestino.getRadius();
-                        double startX = x1 + dx * r / dist;
-                        double startY = y1 + dy * r / dist;
-                        double endX = x2 - dx * r2 / dist;
-                        double endY = y2 - dy * r2 / dist;
+                Polygon flecha = crearFlecha(n1.getCenterX(), n1.getCenterY(), n2.getCenterX(), n2.getCenterY());
+                flecha.setFill(Color.GRAY);
 
-                        // Línea
-                        Line linea = new Line(startX, startY, endX, endY);
-                        linea.setStrokeWidth(2);
-                        linea.setStroke(Color.GRAY);
-                        grafoPane.getChildren().add(linea);
+                double mx = (n1.getCenterX() + n2.getCenterX())/2;
+                double my = (n1.getCenterY() + n2.getCenterY())/2;
+                Label peso = new Label(String.valueOf(v.getPeso()));
+                peso.setLayoutX(mx); peso.setLayoutY(my);
 
-                        // Flecha
-                        double angle = Math.atan2(endY - startY, endX - startX);
-                        double arrowLength = 12; 
-                        double arrowWidth = 6;   
-
-                        Polygon arrowHead = new Polygon();
-                        arrowHead.getPoints().addAll(
-                            0.0, 0.0,
-                            -arrowLength, -arrowWidth / 2,
-                            -arrowLength, arrowWidth / 2
-                        );
-                        arrowHead.setFill(Color.GRAY);
-
-                        arrowHead.setLayoutX(endX);
-                        arrowHead.setLayoutY(endY);
-                        arrowHead.setRotate(Math.toDegrees(angle));
-
-                        grafoPane.getChildren().add(arrowHead);
-                    }
-                }
+                grafoPane.getChildren().addAll(l, flecha, peso);
             }
         }
     }
-    
+
+    private Polygon crearFlecha(double x1, double y1, double x2, double y2) {
+        double ang = Math.atan2(y2 - y1, x2 - x1);
+        double len = 10;
+        double angA = Math.toRadians(25);
+
+        double xA = x2 - len * Math.cos(ang - angA);
+        double yA = y2 - len * Math.sin(ang - angA);
+        double xB = x2 - len * Math.cos(ang + angA);
+        double yB = y2 - len * Math.sin(ang + angA);
+
+        return new Polygon(x2, y2, xA, yA, xB, yB);
+    }
+
     @FXML
-    private void handleAnchorPaneClick(MouseEvent event) throws IOException {
+    private void handleAnchorPaneClick(MouseEvent event) {
         double x = event.getX();
         double y = event.getY();
 
@@ -276,101 +135,127 @@ public class FXMLDocumentController implements Initializable {
     }
 
     @FXML
-    private void agregarVuelo(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/AddVuelo.fxml"));
-        Parent root = loader.load();
-        AddVueloFXMLController vueloController = loader.getController();
-        vueloController.setGrafo(grafo);
+    private void agregarVuelo(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/AddVuelo.fxml"));
+            Parent root = loader.load();
+            AddVueloFXMLController vueloController = loader.getController();
+            vueloController.setGrafo(grafo);
 
-        Stage stage = new Stage();
-        stage.setTitle("Agregar Vuelo");
-        stage.setScene(new Scene(root));
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.showAndWait();
+            Stage stage = new Stage();
+            stage.setTitle("Agregar Vuelo");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
 
-        dibujarGrafo(); // Redibuja aristas nuevas
+            dibujarGrafo();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     @FXML
-    private void eliminarVuelo(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/EliminarVuelo.fxml"));
-        Parent root = loader.load();
+    private void eliminarVuelo(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/EliminarVuelo.fxml"));
+            Parent root = loader.load();
 
-        EliminarVueloFXMLController controller = loader.getController();
-        controller.setGrafo(grafo);
+            EliminarVueloFXMLController controller = loader.getController();
+            controller.setGrafo(grafo);
 
-        Stage stage = new Stage();
-        stage.setTitle("Eliminar Vuelo");
-        stage.setScene(new Scene(root));
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.showAndWait();
-        
-        dibujarGrafo();
+            Stage stage = new Stage();
+            stage.setTitle("Eliminar Vuelo");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+            
+            dibujarGrafo();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     @FXML
-    private void eliminarAeropuerto(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/EliminarAeropuerto.fxml"));
-        Parent root = loader.load();
+    private void eliminarAeropuerto(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/EliminarAeropuerto.fxml"));
+            Parent root = loader.load();
 
-        EliminarAeropuertoController controller = loader.getController();
-        controller.setGrafo(grafo);
+            EliminarAeropuertoController controller = loader.getController();
+            controller.setGrafo(grafo);
 
-        Stage stage = new Stage();
-        stage.setTitle("Eliminar Aeropuerto");
-        stage.setScene(new Scene(root));
-        stage.initModality(Modality.APPLICATION_MODAL);
-        stage.showAndWait();
-        
-        dibujarGrafo();
+            Stage stage = new Stage();
+            stage.setTitle("Eliminar Aeropuerto");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.APPLICATION_MODAL);
+            stage.showAndWait();
+            
+            dibujarGrafo();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
-    private void abrirPantallaVuelos(Aeropuerto aeropuerto) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/MostrarVuelos.fxml"));
-        Parent root = loader.load();
+    private void abrirPantallaVuelos(Aeropuerto aeropuerto) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/MostrarVuelos.fxml"));
+            Parent root = loader.load();
 
-        // Pasar datos al controlador de MostrarVuelos
-        MostrarVuelosFXMLController controller = loader.getController();
-        controller.setDatos(aeropuerto, grafo);
+            MostrarVuelosFXMLController controller = loader.getController();
+            controller.setDatos(aeropuerto, grafo);
 
-        Stage stage = new Stage();
-        stage.setTitle("Vuelos desde " + aeropuerto.getNombre());
-        stage.setScene(new Scene(root));
-        stage.show();
+            Stage stage = new Stage();
+            stage.setTitle("Vuelos desde " + aeropuerto.getNombre());
+            stage.setScene(new Scene(root));
+            stage.show();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
     
     @FXML
-    private void buscarRuta(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/BuscarRuta.fxml"));
-        Scene scene = new Scene(loader.load());
+    private void buscarRuta(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/BuscarRuta.fxml"));
+            Scene scene = new Scene(loader.load());
 
-        // Pasamos el grafo a la ventana BuscarRuta
-        BuscarRutaFXMLController controller = loader.getController();
-        controller.setGrafo(grafo);
+            BuscarRutaFXMLController controller = loader.getController();
+            controller.setGrafo(grafo);
 
-        Stage stage = new Stage();
-        stage.setTitle("Buscar Ruta");
-        stage.setScene(scene);
-        stage.initModality(Modality.WINDOW_MODAL);
-
-        // Usamos el grafoPane (que sí es un Node visible en la escena principal)
-        stage.initOwner(grafoPane.getScene().getWindow());
-        stage.show();
+            Stage stage = new Stage();
+            stage.setTitle("Buscar Ruta");
+            stage.setScene(scene);
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.initOwner(grafoPane.getScene().getWindow());
+            stage.show();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     @FXML
-    private void abrirEstadisticas(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/Estadisticas.fxml"));
-        Parent root = loader.load();
+    private void abrirEstadisticas(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/Estadisticas.fxml"));
+            Parent root = loader.load();
 
-        EstadisticasFXMLController controller = loader.getController();
-        controller.setGrafo(grafo);
+            EstadisticasFXMLController controller = loader.getController();
+            controller.setGrafo(grafo);
 
-        Stage stage = new Stage();
-        stage.setTitle("Estadísticas");
-        stage.setScene(new Scene(root));
-        stage.initModality(Modality.WINDOW_MODAL);
-        stage.initOwner(grafoPane.getScene().getWindow());
-        stage.show();
+            Stage stage = new Stage();
+            stage.setTitle("Estadísticas");
+            stage.setScene(new Scene(root));
+            stage.initModality(Modality.WINDOW_MODAL);
+            stage.initOwner(grafoPane.getScene().getWindow());
+            stage.show();
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    // Stub para cuando clicas en el fondo
+    private void abrirAgregarAeropuertoHandler(double x, double y) {
+        // aquí tu lógica para abrir ventana "Agregar Aeropuerto"
+        System.out.println("Click en vacío: " + x + "," + y);
     }
 }
