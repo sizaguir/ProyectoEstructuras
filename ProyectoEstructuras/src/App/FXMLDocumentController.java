@@ -5,19 +5,24 @@ import aeropuertovuelos.DatosVuelos;
 import aeropuertovuelos.GrafoVuelos;
 import aeropuertovuelos.Utilitarios;
 import aeropuertovuelos.Vuelo;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Group;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
+import javafx.scene.control.Slider;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -36,49 +41,108 @@ public class FXMLDocumentController implements Initializable {
     private GrafoVuelos grafo;
     private Map<Aeropuerto, Circle> nodosVisuales = new HashMap<>();
     private ImageView mapaView;
+    private Group mapaGroup;
+    private double lastX; //arrastrar el mapa
+    private double lastY;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        grafo = DatosVuelos.cargarDatos(); // carga archivos
-        // Fondo de mapa
+        grafo = DatosVuelos.cargarDatos();
+        if (grafo == null) grafo = new GrafoVuelos();
+        mapaGroup = new Group();
+        grafoPane.getChildren().add(mapaGroup);
+
+        // Imagen de fondo del mapa
         mapaView = new ImageView(new Image(getClass().getResourceAsStream("/resources/mapa.png")));
         mapaView.setPreserveRatio(true);
-        mapaView.setOpacity(0.25);
-        grafoPane.getChildren().add(0, mapaView);
-
-        // Redibujar al cambiar tamaño
-        grafoPane.widthProperty().addListener((o,ov,nv) -> redibujar());
-        grafoPane.heightProperty().addListener((o,ov,nv) -> redibujar());
-
-        redibujar();
-    }
-
-    private void redibujar() {
         mapaView.setFitWidth(grafoPane.getWidth());
         mapaView.setFitHeight(grafoPane.getHeight());
+        mapaView.setOpacity(0.25);
+        mapaGroup.getChildren().add(mapaView);
+
+        // Ajustar cuando cambie el tamaño
+        grafoPane.widthProperty().addListener((obs, oldVal, newVal) -> mapaView.setFitWidth(newVal.doubleValue()));
+        grafoPane.heightProperty().addListener((obs, oldVal, newVal) -> mapaView.setFitHeight(newVal.doubleValue()));
+
+        // Zoom con scroll
+        grafoPane.setOnScroll(e -> {
+            double zoomFactor = e.getDeltaY() > 0 ? 1.1 : 0.9;
+            mapaGroup.setScaleX(mapaGroup.getScaleX() * zoomFactor);
+            mapaGroup.setScaleY(mapaGroup.getScaleY() * zoomFactor);
+            e.consume();
+        });
+
+        // Arrastrar el mapa
+        mapaGroup.setOnMousePressed(e -> {
+            lastX = e.getSceneX();
+            lastY = e.getSceneY();
+        });
+        mapaGroup.setOnMouseDragged(e -> {
+            double dx = e.getSceneX() - lastX;
+            double dy = e.getSceneY() - lastY;
+            mapaGroup.setLayoutX(mapaGroup.getLayoutX() + dx);
+            mapaGroup.setLayoutY(mapaGroup.getLayoutY() + dy);
+            lastX = e.getSceneX();
+            lastY = e.getSceneY();
+        });
+        
+        
+        
         dibujarGrafo();
     }
 
+    private void habilitarArrastre() {
+        mapaGroup.setOnMousePressed(e -> {
+            lastX = e.getSceneX();
+            lastY = e.getSceneY();
+        });
+
+        mapaGroup.setOnMouseDragged(e -> {
+            double dx = e.getSceneX() - lastX;
+            double dy = e.getSceneY() - lastY;
+
+            mapaGroup.setTranslateX(mapaGroup.getTranslateX() + dx);
+            mapaGroup.setTranslateY(mapaGroup.getTranslateY() + dy);
+
+            lastX = e.getSceneX();
+            lastY = e.getSceneY();
+        });
+    }
+
     private void dibujarGrafo() {
-        grafoPane.getChildren().remove(1, grafoPane.getChildren().size());
+        // Limpia nodos y aristas anteriores (excepto la imagen de fondo)
+        mapaGroup.getChildren().removeIf(node -> node != mapaView && !(node instanceof Circle && nodosVisuales.containsValue(node)) && !(node instanceof Line || node instanceof Polygon || node instanceof Label));
         nodosVisuales.clear();
 
-        // 1) calcular posiciones por lat/lon
         List<Aeropuerto> lista = new ArrayList<>(grafo.getAeropuertos());
-        Utilitarios.distribuirPorCoordenadas(lista, grafoPane.getWidth(), grafoPane.getHeight());
 
-        // 2) dibujar nodos
         for (Aeropuerto a : lista) {
-            double cx = a.getX(), cy = a.getY();
-            Circle nodo = new Circle(cx, cy, 14, Color.CORNFLOWERBLUE);
-            Tooltip.install(nodo, new Tooltip(a.getNombre()+" ("+a.getCodigo()+")\n"+a.getCiudad()+", "+a.getPais()));
-            nodo.setOnMouseClicked(e -> { abrirPantallaVuelos(a); e.consume(); });
+            double cx = a.getX();
+            double cy = a.getY();
 
-            grafoPane.getChildren().add(nodo);
+            // Si es la primera vez que se agrega y tiene lat/lon
+            if (cx == 0 && cy == 0 && a.getLatitud() != 0 && a.getLongitud() != 0) {
+                cx = convertirLongitudAX(a.getLongitud());
+                cy = convertirLatitudAY(a.getLatitud());
+                a.setX(cx);
+                a.setY(cy);
+            }
+
+            Circle nodo = new Circle(cx, cy, 14, Color.CORNFLOWERBLUE);
+            Tooltip.install(nodo, new Tooltip(a.getNombre() + " (" + a.getCodigo() + ")\n" + a.getCiudad() + ", " + a.getPais()));
+            nodo.setOnMouseClicked(e -> {
+                try {
+                    abrirPantallaVuelos(a);
+                } catch (IOException ex) {
+                    Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            });
+
+            mapaGroup.getChildren().add(nodo);
             nodosVisuales.put(a, nodo);
         }
 
-        // 3) dibujar aristas
+        // Dibujar aristas y flechas
         for (Aeropuerto origen : lista) {
             for (Vuelo v : grafo.getVuelosDesde(origen)) {
                 Aeropuerto destino = v.getDestino();
@@ -93,12 +157,13 @@ public class FXMLDocumentController implements Initializable {
                 Polygon flecha = crearFlecha(n1.getCenterX(), n1.getCenterY(), n2.getCenterX(), n2.getCenterY());
                 flecha.setFill(Color.GRAY);
 
-                double mx = (n1.getCenterX() + n2.getCenterX())/2;
-                double my = (n1.getCenterY() + n2.getCenterY())/2;
+                double mx = (n1.getCenterX() + n2.getCenterX()) / 2;
+                double my = (n1.getCenterY() + n2.getCenterY()) / 2;
                 Label peso = new Label(String.valueOf(v.getPeso()));
-                peso.setLayoutX(mx); peso.setLayoutY(my);
+                peso.setLayoutX(mx);
+                peso.setLayoutY(my);
 
-                grafoPane.getChildren().addAll(l, flecha, peso);
+                mapaGroup.getChildren().addAll(l, flecha, peso);
             }
         }
     }
@@ -117,7 +182,7 @@ public class FXMLDocumentController implements Initializable {
     }
 
     @FXML
-    private void handleAnchorPaneClick(MouseEvent event) {
+    private void handleAnchorPaneClick(MouseEvent event) throws IOException {
         double x = event.getX();
         double y = event.getY();
 
@@ -135,8 +200,7 @@ public class FXMLDocumentController implements Initializable {
     }
 
     @FXML
-    private void agregarVuelo(ActionEvent event) {
-        try {
+    private void agregarVuelo(ActionEvent event) throws IOException {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/AddVuelo.fxml"));
             Parent root = loader.load();
             AddVueloFXMLController vueloController = loader.getController();
@@ -149,14 +213,10 @@ public class FXMLDocumentController implements Initializable {
             stage.showAndWait();
 
             dibujarGrafo();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 
     @FXML
-    private void eliminarVuelo(ActionEvent event) {
-        try {
+    private void eliminarVuelo(ActionEvent event) throws IOException {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/EliminarVuelo.fxml"));
             Parent root = loader.load();
 
@@ -170,14 +230,10 @@ public class FXMLDocumentController implements Initializable {
             stage.showAndWait();
             
             dibujarGrafo();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 
     @FXML
-    private void eliminarAeropuerto(ActionEvent event) {
-        try {
+    private void eliminarAeropuerto(ActionEvent event) throws IOException {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/EliminarAeropuerto.fxml"));
             Parent root = loader.load();
 
@@ -191,13 +247,9 @@ public class FXMLDocumentController implements Initializable {
             stage.showAndWait();
             
             dibujarGrafo();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 
-    private void abrirPantallaVuelos(Aeropuerto aeropuerto) {
-        try {
+    private void abrirPantallaVuelos(Aeropuerto aeropuerto) throws IOException {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/MostrarVuelos.fxml"));
             Parent root = loader.load();
 
@@ -208,9 +260,6 @@ public class FXMLDocumentController implements Initializable {
             stage.setTitle("Vuelos desde " + aeropuerto.getNombre());
             stage.setScene(new Scene(root));
             stage.show();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
     
     @FXML
@@ -254,8 +303,40 @@ public class FXMLDocumentController implements Initializable {
     }
 
     // Stub para cuando clicas en el fondo
-    private void abrirAgregarAeropuertoHandler(double x, double y) {
-        // aquí tu lógica para abrir ventana "Agregar Aeropuerto"
-        System.out.println("Click en vacío: " + x + "," + y);
+    private void abrirAgregarAeropuertoHandler(double x, double y) throws IOException {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/AddAeropuertoFXML.fxml"));
+        Parent root = loader.load();
+
+        AddAeropuertoFXMLController controller = loader.getController();
+        controller.setGrafo(grafo);
+        controller.setMainController(this);
+        controller.setPosicion(x, y);
+
+        Stage stage = new Stage();
+        stage.setTitle("Agregar Aeropuerto");
+        stage.setScene(new Scene(root));
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.showAndWait();
+
+        dibujarGrafo();
+    }
+    
+   
+    private double convertirLongitudAX(double lon) {
+        double width = mapaView.getFitWidth();
+        return (lon + 180) * (width / 360.0);
+    }
+
+    private double convertirLatitudAY(double lat) {
+        double height = mapaView.getFitHeight();
+        return (90 - lat) * (height / 180.0);
+    }
+    
+    public double getWidthGrafoPane() {
+        return grafoPane.getWidth();
+    }
+
+    public double getHeightGrafoPane() {
+        return grafoPane.getHeight();
     }
 }

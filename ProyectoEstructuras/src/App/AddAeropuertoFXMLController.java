@@ -43,6 +43,7 @@ public class AddAeropuertoFXMLController implements Initializable {
     private FXMLDocumentController mainController;
     private double posX;
     private double posY;
+
     
 
     /**
@@ -61,35 +62,56 @@ public class AddAeropuertoFXMLController implements Initializable {
         String pais = paísText.getText().trim();
         String latStr = latText.getText().trim();
         String lonStr = longText.getText().trim();
-        
-        if(nombre.isEmpty()||codigo.isEmpty()||ciudad.isEmpty()||pais.isEmpty()||latStr.isEmpty()||lonStr.isEmpty()){
+
+        if(nombre.isEmpty() || codigo.isEmpty() || ciudad.isEmpty() || pais.isEmpty()){
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Campos vacíos");
             alert.setHeaderText(null);
-            alert.setContentText("Por favor complete todos los campos.");
+            alert.setContentText("Por favor complete los campos obligatorios.");
             alert.showAndWait();
             return;
         }
 
-        if(!esNumero(latStr) || !esNumero(lonStr)){
-            Alert alert = new Alert(Alert.AlertType.ERROR);
-            alert.setTitle("Error en formato");
-            alert.setHeaderText(null);
-            alert.setContentText("⚠ Latitud y longitud deben ser valores numéricos válidos.");
-            alert.showAndWait();
-            return;
-        }
-        
-        double lat, lon;
-       
-            lat = Double.parseDouble(latStr);
-            lon = Double.parseDouble(lonStr);
+        double cx = posX;
+        double cy = posY;
 
-        Aeropuerto aeropuerto = new Aeropuerto(codigo, nombre, ciudad, pais, lat, lon);
-        aeropuerto.setX(posX);
-        aeropuerto.setY(posY);
-        
-        if (grafo.contieneAeropuerto(aeropuerto)) {
+        // Si ingresaron lat/lon, calculamos la posición en el mapa
+        if(!latStr.isEmpty() && !lonStr.isEmpty()){
+            if(!esNumero(latStr) || !esNumero(lonStr)){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error en formato");
+                alert.setHeaderText(null);
+                alert.setContentText("⚠ Latitud y longitud deben ser valores numéricos válidos.");
+                alert.showAndWait();
+                return;
+            }
+
+            double lat = Double.parseDouble(latStr);
+            double lon = Double.parseDouble(lonStr);
+
+            // Conversión simple a píxeles sobre el AnchorPane
+            cx = (lon + 180) * (mainController.getWidthGrafoPane() / 360.0);
+            cy = (90 - lat) * (mainController.getHeightGrafoPane() / 180.0);
+        }
+
+        Aeropuerto aeropuerto = new Aeropuerto(codigo, nombre, ciudad, pais);
+
+        if (latStr.isEmpty()) {
+            aeropuerto.setLatitud(0);
+        } else {
+            aeropuerto.setLatitud(Double.parseDouble(latStr));
+        }
+
+        if (lonStr.isEmpty()) {
+            aeropuerto.setLongitud(0);
+        } else {
+            aeropuerto.setLongitud(Double.parseDouble(lonStr));
+        }
+
+        aeropuerto.setX(cx);
+        aeropuerto.setY(cy);
+
+        if(grafo.contieneAeropuerto(aeropuerto)){
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Duplicado");
             alert.setHeaderText(null);
@@ -97,7 +119,7 @@ public class AddAeropuertoFXMLController implements Initializable {
             alert.showAndWait();
             return;
         }
-        
+
         grafo.agregarAeropuerto(aeropuerto);
         DatosVuelos.guardarDatos(grafo);
 
@@ -106,7 +128,7 @@ public class AddAeropuertoFXMLController implements Initializable {
         alert.setHeaderText(null);
         alert.setContentText("✅ Aeropuerto agregado correctamente.");
         alert.showAndWait();
-        
+
         Stage stage = (Stage) addAeropuertoButton.getScene().getWindow();
         stage.close();
     }
@@ -142,7 +164,7 @@ public class AddAeropuertoFXMLController implements Initializable {
     
     //Para que valide si es número
     private boolean esNumero(String texto) {
-        return texto.matches("\\d+(\\.\\d+)?"); //Para que acepte decimales y enteros
+        return texto.matches("-?\\d+(\\.\\d+)?"); //Decimales y negativos
     }
     
 }
