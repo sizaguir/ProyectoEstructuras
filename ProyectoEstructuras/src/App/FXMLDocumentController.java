@@ -131,7 +131,7 @@ public class FXMLDocumentController implements Initializable {
             Circle nodo = new Circle(cx, cy, 14, Color.CORNFLOWERBLUE);
             Tooltip.install(nodo, new Tooltip(a.getNombre() + " (" + a.getCodigo() + ")\n" + a.getCiudad() + ", " + a.getPais()));
             nodo.setOnMouseClicked(e -> {
-                try {
+                try { //try/catch obligatorio
                     abrirPantallaVuelos(a);
                 } catch (IOException ex) {
                     Logger.getLogger(FXMLDocumentController.class.getName()).log(Level.SEVERE, null, ex);
@@ -211,6 +211,7 @@ public class FXMLDocumentController implements Initializable {
             stage.setScene(new Scene(root));
             stage.initModality(Modality.APPLICATION_MODAL);
             stage.showAndWait();
+            DatosVuelos.guardarDatos(grafo);
 
             dibujarGrafo();
     }
@@ -264,8 +265,7 @@ public class FXMLDocumentController implements Initializable {
     }
     
     @FXML
-    private void buscarRuta(ActionEvent event) {
-        try {
+    private void buscarRuta(ActionEvent event) throws IOException {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/BuscarRuta.fxml"));
             Scene scene = new Scene(loader.load());
 
@@ -278,14 +278,10 @@ public class FXMLDocumentController implements Initializable {
             stage.initModality(Modality.WINDOW_MODAL);
             stage.initOwner(grafoPane.getScene().getWindow());
             stage.show();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 
     @FXML
-    private void abrirEstadisticas(ActionEvent event) {
-        try {
+    private void abrirEstadisticas(ActionEvent event) throws IOException {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/Estadisticas.fxml"));
             Parent root = loader.load();
 
@@ -298,9 +294,6 @@ public class FXMLDocumentController implements Initializable {
             stage.initModality(Modality.WINDOW_MODAL);
             stage.initOwner(grafoPane.getScene().getWindow());
             stage.show();
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
     }
 
     // Stub para cuando clicas en el fondo

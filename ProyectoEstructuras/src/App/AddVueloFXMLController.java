@@ -1,6 +1,7 @@
 package App;
 
 import aeropuertovuelos.Aeropuerto;
+import aeropuertovuelos.DatosVuelos;
 import aeropuertovuelos.GrafoVuelos;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
