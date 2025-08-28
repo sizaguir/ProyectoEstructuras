@@ -40,50 +40,38 @@ public class EditarVueloFXMLController {
     
     @FXML
     private void guardarCambios() {
-        try {
-            // Validar si realmente se cargó un vuelo
-            if (vueloOriginal == null) {
-                Alert alert = new Alert(Alert.AlertType.WARNING, 
-                    "Primero selecciona un vuelo para editar.");
-                alert.showAndWait();
-                return; // No hace nada más
-            }
+        if (vueloOriginal == null) {
+            new Alert(Alert.AlertType.WARNING, "Primero selecciona un vuelo para editar.").showAndWait();
+            return;
+        }
 
-            Aeropuerto origen = cmbOrigen.getValue();
-            Aeropuerto destino = cmbDestino.getValue();
-            String aerolinea = txtAerolinea.getText();
-            String pesoTexto= txtPeso.getText();
+        Aeropuerto origen = cmbOrigen.getValue();
+        Aeropuerto destino = cmbDestino.getValue();
+        String aerolinea = txtAerolinea.getText();
+        String pesoTexto = txtPeso.getText();
 
-            if (origen == null || destino == null || pesoTexto.isEmpty() || aerolinea.isEmpty()) {
-                throw new IllegalArgumentException("Todos los campos son obligatorios");
-            }
-            
-            if (!esNumero(pesoTexto)) {
+        if (origen == null || destino == null || aerolinea.isEmpty() || pesoTexto.isEmpty()) {
+            new Alert(Alert.AlertType.ERROR, "Todos los campos son obligatorios.").showAndWait();
+            return;
+        }
+
+        if (!esNumero(pesoTexto)) {
             new Alert(Alert.AlertType.ERROR, "⚠ El peso debe ser un número válido.").showAndWait();
             return;
-            }
-
-            double peso = Double.parseDouble(txtPeso.getText());
-
-            // eliminar vuelo viejo y agregar el nuevo
-            grafo.eliminarVuelo(vueloOriginal.getOrigen(), vueloOriginal.getDestino());
-            grafo.agregarVuelo(origen, destino, peso, aerolinea);
-
-            DatosVuelos.guardarDatos(grafo); // persistir cambios
-
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Vuelo editado");
-            alert.setHeaderText(null);
-            alert.setContentText("El vuelo se editó correctamente.");
-            alert.showAndWait();
-
-            cerrarVentana();
-
-        } catch (Exception e) {
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Error al guardar cambios: " + e.getMessage());
-            alert.showAndWait();
         }
+
+        double peso = Double.parseDouble(pesoTexto);
+
+        // eliminar vuelo viejo y agregar el nuevo
+        grafo.eliminarVuelo(vueloOriginal.getOrigen(), vueloOriginal.getDestino());
+        grafo.agregarVuelo(origen, destino, peso, aerolinea);
+
+        DatosVuelos.guardarDatos(grafo); // persistir cambios
+
+        new Alert(Alert.AlertType.INFORMATION, "El vuelo se editó correctamente.").showAndWait();
+        cerrarVentana();
     }
+
     
     @FXML
     private void cancelar() {
