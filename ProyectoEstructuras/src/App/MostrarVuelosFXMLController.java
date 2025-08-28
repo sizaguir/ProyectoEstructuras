@@ -91,7 +91,7 @@ public class MostrarVuelosFXMLController {
             return;
         }
 
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("EditarVuelo.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/resources/EditarVuelo.fxml"));
             Scene scene = new Scene(loader.load());
 
             EditarVueloFXMLController controller = loader.getController();

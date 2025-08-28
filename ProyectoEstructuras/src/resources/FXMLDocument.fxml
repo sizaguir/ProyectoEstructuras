@@ -11,7 +11,7 @@
 
    <top>
       <Label alignment="CENTER" prefHeight="66.0" prefWidth="509.0"
-             text="Aeropuerto Internacional de Daxing" textAlignment="CENTER"
+             text="Gestión de la Red de Vuelos" textAlignment="CENTER"
              BorderPane.alignment="CENTER">
          <font>
             <Font name="System Bold" size="22.0" />

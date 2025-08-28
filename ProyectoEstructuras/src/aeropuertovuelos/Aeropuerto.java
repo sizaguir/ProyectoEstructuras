@@ -1,6 +1,7 @@
 package aeropuertovuelos;
 
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.Objects;
 
 public class Aeropuerto implements Serializable{
@@ -96,16 +97,13 @@ public class Aeropuerto implements Serializable{
         return nombre + " (" + codigo + ") - " + ciudad + ", " + pais;
     }
 
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Aeropuerto)) return false;
-        Aeropuerto other = (Aeropuerto) o;
-        return codigo.equals(other.codigo);        
-    }   
-    
-    @Override
-    public int hashCode() {
-        return codigo.hashCode();
+    // Definir un Comparator estático en GrafoVuelos
+    private static final Comparator<Aeropuerto> cmpAeropuerto = Comparator.comparing(Aeropuerto::getCodigo);
+
+    // Método auxiliar para comparar aeropuertos usando el Comparator
+    private boolean mismoAeropuerto(Aeropuerto a1, Aeropuerto a2) {
+        if (a1 == null || a2 == null) return false;
+        return cmpAeropuerto.compare(a1, a2) == 0;
     }
+
 }

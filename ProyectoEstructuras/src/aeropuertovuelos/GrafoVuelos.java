@@ -15,9 +15,9 @@ import java.util.TreeMap;
 
 public class GrafoVuelos implements Serializable {
 
-    private Map<Aeropuerto, List<Vuelo>> vuelos;
+    private Map<Aeropuerto, List<Vuelo>> vuelos; //Lista de Adyacencia
     private Set<Aeropuerto> aeropuertos;
-
+    private Comparator<Aeropuerto> cmp;
     // Árbol de búsqueda por aerolínea
     private TreeMap<String, List<Vuelo>> vuelosPorAerolinea;
 
@@ -25,6 +25,9 @@ public class GrafoVuelos implements Serializable {
         this.aeropuertos = new HashSet<>();
         this.vuelos = new HashMap<>();
         this.vuelosPorAerolinea = new TreeMap<>();
+        this.cmp = cmp;
+
+        
     }
 
     // Agregar un aeropuerto (nodo)         
