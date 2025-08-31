@@ -1,7 +1,6 @@
 package App;
 
 import aeropuertovuelos.Aeropuerto;
-import aeropuertovuelos.Aeropuerto;
 import aeropuertovuelos.DatosVuelos;
 import aeropuertovuelos.GrafoVuelos;
 import java.net.URL;
@@ -81,7 +80,7 @@ public class AddAeropuertoFXMLController implements Initializable {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error en formato");
                 alert.setHeaderText(null);
-                alert.setContentText("⚠ Latitud y longitud deben ser valores numéricos válidos.");
+                alert.setContentText(" Latitud y longitud deben ser valores numéricos válidos.");
                 alert.showAndWait();
                 return;
             }
