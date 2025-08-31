@@ -3,7 +3,6 @@ package App;
 import aeropuertovuelos.Aeropuerto;
 import aeropuertovuelos.DatosVuelos;
 import aeropuertovuelos.GrafoVuelos;
-import aeropuertovuelos.Utilitarios;
 import aeropuertovuelos.Vuelo;
 import java.io.IOException;
 import java.net.URL;

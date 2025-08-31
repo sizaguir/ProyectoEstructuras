@@ -1,6 +1,5 @@
 package App;
 
-import App.EditarVueloFXMLController;
 import aeropuertovuelos.Aeropuerto;
 import aeropuertovuelos.DatosVuelos;
 import aeropuertovuelos.GrafoVuelos;
