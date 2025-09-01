@@ -1,3 +1,9 @@
 GYE;CDG;1800.0;LATAM
-GYE;YLJ;501.0;LATAM
-YLJ;PKX;2200.0;Emirates
+CDG;PKX;750.0;Air France 
+PKX;SYD;800.0;Air China
+PKX;MAD;840.0;Air China
+MAD;GRU;1000.0;Iberia Airways
+DXB;LAX;1260.0;Emirates airways
+UIO;LAX;450.0;Avianca
+LAX;PKX;2500.0;Emirates
+LAX;HND;1500.0;Tokyo airways

@@ -20,6 +20,7 @@ public class GrafoVuelos implements Serializable {
     private Comparator<Aeropuerto> cmp;
     // Árbol de búsqueda por aerolínea
     private TreeMap<String, List<Vuelo>> vuelosPorAerolinea;
+    public boolean isDirected= true;
 
     public GrafoVuelos() {
         this.aeropuertos = new HashSet<>();

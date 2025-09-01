@@ -11,7 +11,7 @@ public class Aeropuerto implements Serializable{
     private String pais;     // Ej: "China"
     private double latitud;  // Opcional para visualización
     private double longitud; // Opcional para visualización
-    // Coordenadas para dibujar en el grafo
+    // Coordenadas para dibujar en el grafo si no se coloca lat y lon
     private double x;
     private double y;
 

@@ -2,7 +2,6 @@ package aeropuertovuelos;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -49,7 +48,7 @@ public class DatosVuelos {
         GrafoVuelos grafo = new GrafoVuelos();
         Map<String, Aeropuerto> mapaAeropuertos = new HashMap<>();
 
-        // --- Leer aeropuertos ---
+        // Leer aeropuertos
         File fileA = new File(ARCHIVO_AEROPUERTOS);
         if (fileA.exists()) {
             BufferedReader brA = null;
@@ -84,7 +83,7 @@ public class DatosVuelos {
             System.out.println("Archivo aeropuertos.txt no encontrado, grafo vacío.");
         }
 
-        // --- Leer vuelos ---
+        // Leer vuelos
         File fileV = new File(ARCHIVO_VUELOS);
         if (fileV.exists()) {
             BufferedReader brV = null;
@@ -121,7 +120,7 @@ public class DatosVuelos {
         return grafo;
     }
 
-    // --- Método auxiliar para validar números ---
+    //Método auxiliar para validar números 
     private static boolean esNumero(String str) {
         if (str == null || str.isEmpty()) return false;
         return str.matches("-?\\d+(\\.\\d+)?");

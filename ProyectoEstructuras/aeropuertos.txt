@@ -1,6 +1,11 @@
 GYE;Aeropuerto Internacional José Joaquín de Olmedo;Guayaquil;Ecuador;-2.157;-79.883;240.72576444444448;291.21612
-PKX;Beijing Daxing International Airport;Beijing;China;39.509;116.41;712.7013777777778;159.55156
-YLJ;Aeropuerto Internacional Yellowjackets;Seattle;EEUU;0.0;0.0;143.2;162.4
 CDG;Charles de Gaulle;París;Francia;49.009;2.547;438.92412;129.53155999999998
-GRU;Aeropuerto de São Paulo-Guarulhos;São Paulo;Brasil;-23.435;-46.473;321.0582533333333;355.42966666666666
+PKX;Beijing Daxing International Airport;Beijing;China;39.509;116.41;712.7013777777778;159.55156
 HND;Aeropuerto de Haneda;Tokio;Japón;35.553;139.781;768.8956488888889;170.60060000000001
+GRU;Aeropuerto de São Paulo-Guarulhos;São Paulo;Brasil;-23.435;-46.473;321.0582533333333;355.42966666666666
+MAD;Adolfo Suárez Madrid-Barajas;Madrid;España;40.4893;-3.5676;424.22190400000005;155.13352666666665
+DXB;Dubai International Airport;Dubái;Emiratos Árabes Unidos;25.2532;55.3657;565.9237497777779;202.87330666666668
+SYD;Sydney Kingsford Smith Airport;Sídney;Australia;-33.9399;151.1753;796.2926102222223;388.34502
+UIO;Aeropuerto Internacional Mariscal Sucre;Quito;Ecuador;-0.1292;-78.3575;244.39374444444445;282.4048266666667
+LAX;Los Angeles International Airport;Los Ángeles;Estados Unidos;33.9416;-118.4085;148.09334;175.64965333333333
+HND;Tokyo Haneda Airport;Tokio;Japón;35.5494;139.7798;768.8927635555557;170.61188

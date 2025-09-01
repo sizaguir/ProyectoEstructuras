@@ -85,10 +85,6 @@ public class Vuelo implements Serializable {
         this.horaLlegada = horaLlegada;
     }
 
-//    @Override
-//    public String toString() {
-//        return origen.getCodigo() + " → " + destino.getCodigo() + " | " + peso + " | " + aerolinea;
-//    }
     @Override
     public String toString() {
         return origen.getCodigo() + " -> " + destino.getCodigo() + " | " + aerolinea + " | Salida: " + formatearHora(horaSalida) + " | Llegada: " + formatearHora(horaLlegada);
