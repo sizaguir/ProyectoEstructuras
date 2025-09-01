@@ -114,7 +114,7 @@ public class AddAeropuertoFXMLController implements Initializable {
             Alert alert = new Alert(Alert.AlertType.WARNING);
             alert.setTitle("Duplicado");
             alert.setHeaderText(null);
-            alert.setContentText("⚠ Ya existe un aeropuerto con ese código.");
+            alert.setContentText("Ya existe un aeropuerto con ese código.");
             alert.showAndWait();
             return;
         }
@@ -125,7 +125,7 @@ public class AddAeropuertoFXMLController implements Initializable {
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle("Éxito");
         alert.setHeaderText(null);
-        alert.setContentText("✅ Aeropuerto agregado correctamente.");
+        alert.setContentText("Aeropuerto agregado correctamente.");
         alert.showAndWait();
 
         Stage stage = (Stage) addAeropuertoButton.getScene().getWindow();
